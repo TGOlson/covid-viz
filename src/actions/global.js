@@ -1,18 +1,26 @@
 import {GLOBAL_CASES_URL} from './const';
 
-export const fetchGlobalCases = () =>
+export const fetchGlobalCases = () => (dispatch) =>
   fetch(GLOBAL_CASES_URL)
     .then(res => res.text())
     .then(csv => {
       // Need to split on commas that aren't surrounded in quotes... somehow...
       const [header, ...rawRows] = csv.trim().split('\n').map(r => r.split(','));
-      const dates = header.slice(4);
+      const dateRange = header.slice(4);
 
-      const rows = Object.values(rawRows
+      const rows = rawRows
         .map(parseRow)
-        .reduce(combineRowsByCountry, {}));
+        .reduce(combineRowsByCountry, {});
 
-      return {dates, rows};
+      dispatch({
+        type: 'FETCHED_DATE_RANGE',
+        dateRange,
+      });
+
+      dispatch({
+        type: 'FETCHED_GLOBAL_CASES',
+        values: rows,
+      });
     })
 
 const parseRow = (row) => {
