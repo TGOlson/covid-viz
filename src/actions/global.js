@@ -1,17 +1,8 @@
-import {GLOBAL_CASES_URL} from './const';
+import {GLOBAL_CASES_URL, GLOBAL_DEATHS_URL} from './const';
 
 export const fetchGlobalCases = () => (dispatch) =>
-  fetch(GLOBAL_CASES_URL)
-    .then(res => res.text())
-    .then(csv => {
-      // Need to split on commas that aren't surrounded in quotes... somehow...
-      const [header, ...rawRows] = csv.trim().split('\n').map(r => r.split(','));
-      const dateRange = header.slice(4);
-
-      const rows = rawRows
-        .map(parseRow)
-        .reduce(combineRowsByCountry, {});
-
+  fetchGlobalData(GLOBAL_CASES_URL)
+    .then(({dateRange, rows}) => {
       dispatch({
         type: 'FETCHED_DATE_RANGE',
         dateRange,
@@ -22,6 +13,32 @@ export const fetchGlobalCases = () => (dispatch) =>
         values: rows,
       });
     })
+
+export const fetchGlobalDeaths = () => (dispatch) =>
+  fetchGlobalData(GLOBAL_DEATHS_URL)
+    .then(({rows}) => {
+      dispatch({
+        type: 'FETCHED_GLOBAL_DEATHS',
+        values: rows,
+      });
+    })
+
+
+const fetchGlobalData = (url) =>
+  fetch(url)
+    .then(res => res.text())
+    .then(csv => {
+      // Need to split on commas that aren't surrounded in quotes... somehow...
+      const [header, ...rawRows] = csv.trim().split('\n').map(r => r.split(','));
+      const dateRange = header.slice(4);
+
+      const rows = rawRows
+        .map(parseRow)
+        .reduce(combineRowsByCountry, {});
+
+      return {dateRange, rows};
+    });
+
 
 const parseRow = (row) => {
   // const state = row[0]

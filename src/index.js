@@ -10,7 +10,7 @@ import reducer from './reducer'
 import './index.css';
 import App from './App';
 
-import {fetchGlobalCases} from './actions/global'
+import {fetchGlobalCases, fetchGlobalDeaths} from './actions/global'
 
 const store = createStore(
   reducer,
@@ -28,3 +28,4 @@ ReactDOM.render(
 );
 
 store.dispatch(fetchGlobalCases())
+store.dispatch(fetchGlobalDeaths())

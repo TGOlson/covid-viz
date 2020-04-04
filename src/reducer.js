@@ -3,7 +3,7 @@ const INITIAL_STATE = {
   global: {
     cases: null,
     deaths: null,
-    filteredCountries: ['Italy', 'US', 'Australia', 'Singapore', 'France', 'Spain', 'Germany'],
+    filteredCountries: ['Italy', 'US', 'United Kingdom', 'Singapore', 'France', 'Spain', 'Germany'],
     logScale: true,
   },
   unitedStates: {
@@ -26,6 +26,15 @@ export default (state = INITIAL_STATE, action) => {
         global: {
           ...state.global,
           cases: action.values
+        }
+      }
+
+    case 'FETCHED_GLOBAL_DEATHS':
+      return {
+        ...state,
+        global: {
+          ...state.global,
+          deaths: action.values
         }
       }
 
