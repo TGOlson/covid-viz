@@ -1,8 +1,10 @@
-### covid-viz
+# covid-viz
+
+http://tgolson.com/covid-viz
 
 Dashboard for various covid visualizations. Data from by Johns Hopkins CSSE (https://github.com/CSSEGISandData/COVID-19)
 
-# dev
+### dev
 
 Setup
 ```
