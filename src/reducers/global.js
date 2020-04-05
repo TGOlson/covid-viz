@@ -1,7 +1,17 @@
 const INITIAL_STATE = {
   cases: null,
   deaths: null,
-  filteredCountries: ['Italy', 'US', 'United Kingdom', 'Singapore', 'France', 'Spain', 'Germany', 'Korea, South'],
+  allCountries: null,
+  filteredCountries: {
+    Italy: true,
+    US: true,
+    'United Kingdom': true,
+    Singapore: true,
+    France: true,
+    Spain: true,
+    Germany: true,
+    'Korea, South': true,
+  },
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -9,6 +19,7 @@ export default (state = INITIAL_STATE, action) => {
     case 'FETCHED_GLOBAL_CASES':
       return {
         ...state,
+        allCountries: action.values.map((x) => x.id),
         cases: action.values,
       };
 
@@ -16,6 +27,16 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         deaths: action.values,
+      };
+
+
+    case 'TOGGLE_COUNTRY_FILTER':
+      return {
+        ...state,
+        filteredCountries: {
+          ...state.filteredCountries,
+          [action.country]: !state.filteredCountries[action.country],
+        },
       };
 
     default: return state;
