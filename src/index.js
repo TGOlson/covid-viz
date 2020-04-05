@@ -1,31 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Provider } from 'react-redux'
-import { applyMiddleware, createStore } from 'redux';
-import thunkMiddleware from 'redux-thunk'
-import logger from 'redux-logger'
-import reducer from './reducer'
+import { Provider } from 'react-redux';
+import store from './store';
 
 import './index.css';
 import App from './App';
 
-import {fetchGlobalCases, fetchGlobalDeaths} from './actions/global'
-
-const store = createStore(
-  reducer,
-  applyMiddleware(
-    thunkMiddleware,
-    logger
-  )
-)
+import { fetchGlobalCases, fetchGlobalDeaths } from './actions/global';
 
 ReactDOM.render(
   <Provider store={store}>
     <App />
-    </Provider>,
-  document.getElementById('root')
+  </Provider>,
+  document.getElementById('root'),
 );
 
-store.dispatch(fetchGlobalCases())
-store.dispatch(fetchGlobalDeaths())
+store.dispatch(fetchGlobalCases());
+store.dispatch(fetchGlobalDeaths());

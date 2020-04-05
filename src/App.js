@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Route, Link } from "react-router-dom";
+import { HashRouter, Route, Link } from 'react-router-dom';
 
 import './App.css';
 
@@ -8,17 +8,17 @@ import Details from './pages/Details';
 
 function App() {
   return (
-    <HashRouter basename='/'>
+    <HashRouter basename="/">
       <div>
         <ul>
           <li><Link to="/">GlobalOverview</Link></li>
           <li><Link to="/details">Details</Link></li>
         </ul>
-      <hr />
-      <Route exact path="/" component={GlobalOverview} />
-      <Route path="/details" component={Details} />
+        <hr />
+        <Route exact path="/" component={GlobalOverview} />
+        <Route path="/details" component={Details} />
       </div>
-   </HashRouter>
+    </HashRouter>
   );
 }
 export default App;

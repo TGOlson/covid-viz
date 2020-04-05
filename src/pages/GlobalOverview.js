@@ -1,76 +1,42 @@
 import React from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
-import LineChart from '../components/LineChart'
-
-const formatData = (dateRange, data) =>
-  Object.values(data).map(series => {
-    const data = series.values.map((value, index) => {
-      const [m, d, year] = dateRange[index].split('/');
-      // const x = new Date(dateRange[index]);
-      const x = `20${year}-${m}-${d}`;
-
-      if (value === 0) {
-        return null;
-      }
-
-      return {
-        x,
-        y: value,
-      }
-    }).filter(x => x !== null);
-
-    return {
-      id: series.country,
-      data,
-    };
-  });
+import LineChart from '../components/LineChart';
 
 function GlobalOverview(props) {
-  const {countries, cases, deaths, dateRange} = props;
+  const {
+    countries, cases, deaths, logScale,
+  } = props;
 
   if (!cases || !deaths) {
-    return <p>loading...</p>
+    return <p>loading...</p>;
   }
 
-  const filteredCases = countries.map(country => cases[country]);
-  const filteredDeaths = countries.map(country => deaths[country]);
+  const filteredCases = countries.map((country) => cases[country]);
+  const filteredDeaths = countries.map((country) => deaths[country]);
 
-  const caseData = formatData(dateRange, filteredCases);
-  const deathData = formatData(dateRange, filteredDeaths);
+  const caseData = Object.values(filteredCases);
+  const deathData = Object.values(filteredDeaths);
 
-  const onToggle = () =>
-    props.dispatch({type: 'TOGGLE_GLOBAL_LOG_SCALE'})
-
+  // <button onClick={onToggle}>Toggle Log Scale</button>
   return (
     <div>
       <h3>Global Cases</h3>
       <p>Overview of coronavirus cases around the world.</p>
-      <div style={{height: '600px', maxWidth:'900px'}}>
-        <LineChart data={caseData} logScale={props.logScale} />
-      </div>
-      <button onClick={onToggle}>Toggle Log Scale</button>
-
+      <LineChart size="large" data={caseData} logScale={logScale} />
 
       <h3>Global Deaths</h3>
       <p>Overview of coronavirus deaths around the world.</p>
-      <div style={{height: '600px', maxWidth:'900px'}}>
-        <LineChart data={deathData} logScale={props.logScale} />
-      </div>
-      <button onClick={onToggle}>Toggle Log Scale</button>
-
-
+      <LineChart size="large" data={deathData} logScale={logScale} />
     </div>
   );
 }
 
-const mapStateToProps = ({ dateRange, global }) => ({
-  dateRange: dateRange,
+const mapStateToProps = ({ global }) => ({
   cases: global.cases,
   deaths: global.deaths,
   countries: global.filteredCountries,
   logScale: global.logScale,
-})
+});
 
 export default connect(mapStateToProps)(GlobalOverview);
-// export default Overview;
