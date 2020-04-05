@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ResponsiveLine } from '@nivo/line';
+import {
+  Container, Paper, Button, ButtonGroup, Grid,
+} from '@material-ui/core';
 
 import { ChartData } from '../propTypes';
 
@@ -106,6 +109,9 @@ class LineChart extends React.Component {
       tickRotation: -66,
       tickValues: 10,
       format: xFormat,
+      legend: 'Number of days since Nth case',
+      legendOffset: 36,
+      legendPosition: 'middle',
     };
 
     const axisLeft = {
@@ -114,10 +120,13 @@ class LineChart extends React.Component {
       tickSize: 5,
       tickPadding: 5,
       tickRotation: 0,
+      legend: 'Count',
+      legendOffset: -50,
+      legendPosition: 'middle',
     };
 
     const legend = {
-      anchor: 'right',
+      anchor: 'top-right',
       direction: 'column',
       justify: false,
       translateX: 100,
@@ -141,47 +150,60 @@ class LineChart extends React.Component {
 
     const logScaleButton = enableLogScale
       ? (
-        <button type="button" onClick={this.onLogScaleToggle}>
-          {logScale ? 'Linear scale' : 'Log scale'}
-        </button>
+        <ButtonGroup variant="text" size="small" color="primary" aria-label="contained primary button group">
+          <Button disabled={logScale} onClick={this.onLogScaleToggle}>Log scale</Button>
+          <Button disabled={!logScale} onClick={this.onLogScaleToggle}>Linear scale</Button>
+        </ButtonGroup>
       )
       : null;
 
     const normalizeDaysButton = enableNormalizeDays
       ? (
-        <button type="button" onClick={this.onNormalizeDaysToggle}>
-          {normalizeDays ? 'Absolute timeline' : 'Normalized days'}
-        </button>
+        <ButtonGroup variant="text" size="small" color="primary" aria-label="contained primary button group">
+          <Button disabled={normalizeDays} onClick={this.onNormalizeDaysToggle}>
+            Normalized days
+          </Button>
+          <Button disabled={!normalizeDays} onClick={this.onNormalizeDaysToggle}>
+            Absolute timeline
+          </Button>
+        </ButtonGroup>
       )
       : null;
 
+
     return (
-      <div style={dimension}>
-        <ResponsiveLine
-          data={data}
-          margin={{
-            top: 50, right: 110, bottom: 50, left: 60,
-          }}
-          xScale={xScale}
-          yScale={yScale}
-          xFormat={xFormat}
-          axisBottom={axisBottom}
-          gridYValues={gridYValues}
-          axisLeft={axisLeft}
-          isInteractive
+      <Container size="md" disableGutters>
+        <Paper style={{ marginTop: '12px', marginBottom: '6px' }}>
+          <Container style={dimension} disableGutters>
+            <ResponsiveLine
+              data={data}
+              margin={{
+                top: 50, right: 110, bottom: 50, left: 60,
+              }}
+              xScale={xScale}
+              yScale={yScale}
+              xFormat={xFormat}
+              axisBottom={axisBottom}
+              gridYValues={gridYValues}
+              axisLeft={axisLeft}
+              isInteractive
     // pointSize={6}
-          useMesh
-          enableGridX={false}
+              useMesh
+              enableGridX={false}
     // sliceTooltip={(slice) => {
     //   console.log(slice)
     //   return <p>foo</p>;
     // }}
-          enableSlices="x"
-          legends={[legend]}
-        />
-        {logScaleButton}
-        {normalizeDaysButton}
-      </div>
+              enableSlices="x"
+              legends={[legend]}
+            />
+          </Container>
+        </Paper>
+        <Grid container justify="center" spacing={8}>
+          <Grid item>{logScaleButton}</Grid>
+          <Grid item>{normalizeDaysButton}</Grid>
+        </Grid>
+      </Container>
     );
   }
 }

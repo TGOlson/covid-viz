@@ -1,5 +1,6 @@
 import React from 'react';
 import { HashRouter, Route, Link } from 'react-router-dom';
+import { Container } from '@material-ui/core';
 
 import './App.css';
 
@@ -15,8 +16,10 @@ function App() {
           <li><Link to="/unitedstates">United States</Link></li>
         </ul>
         <hr />
-        <Route exact path="/" component={GlobalStats} />
-        <Route path="/unitedstates" component={UnitedStatesStats} />
+        <Container maxWidth="md">
+          <Route exact path="/" component={GlobalStats} />
+          <Route path="/unitedstates" component={UnitedStatesStats} />
+        </Container>
       </div>
     </HashRouter>
   );

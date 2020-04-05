@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Container, Typography } from '@material-ui/core';
 
 import { ChartData } from '../propTypes';
 import CountrySelector from '../components/CountrySelector';
 import LineChart from '../components/LineChart';
+
 
 const propTypes = {
   allCountries: PropTypes.arrayOf(PropTypes.string),
@@ -77,9 +79,26 @@ function GlobalOverview(props) {
         onFilterToggle={onFilterToggle}
       />
 
-      <h3>Global Cases</h3>
-      <p>Overview of coronavirus cases around the world.</p>
-      <LineChart size="large" data={filteredCases} enableLogScale enableNormalizeDays={50} />
+
+      <Container maxWidth="md" disableGutters>
+        <Typography variant="h2" gutterBottom>Global Cases</Typography>
+        <Typography variant="body2">
+          Overview of coronavirus cases around the world.
+          This shows at a high level, how quickly the virus has spread globally.
+          It is most useful when viewed on a log scale to see the magnitude of increase,
+          as well as a normalized day series to compare rate across countries.
+          However, a linear scale or an absolute time scale can also show interesting trends.
+          One thing to keep in mind when viewing global case counts
+          is that many countries have different testing standards,
+          as well as capacities. This means that confirmed cases might differ
+          substantially from actual case counts in certain countries.
+        </Typography>
+        <Typography variant="caption" display="block" gutterBottom style={{ textAlign: 'center', fontStyle: 'italic', marginBottom: '12px' }}>
+          Data last updated at 7:34 a.m. on April 5, 2020.
+        </Typography>
+        <LineChart size="large" data={filteredCases} enableLogScale enableNormalizeDays={50} />
+
+      </Container>
 
       <h3>Global Deaths</h3>
       <p>Overview of coronavirus deaths around the world.</p>

@@ -1,5 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import FormHelperText from '@material-ui/core/FormHelperText';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const propTypes = {
   allCountries: PropTypes.arrayOf(PropTypes.string),
@@ -31,18 +37,24 @@ function CountrySelector({ allCountries, filteredCountries, onFilterToggle }) {
   if (!allCountries) return <p>loading...</p>;
 
   const defaultGroupings = groupings.map(({ region, countries }) => (
-    <div key={region}>
-      <h3>{region}</h3>
-      <ul>
-        {countries.map((country) => (
-          <li key={country} onClick={() => onFilterToggle(country)}>
-            {country}
-            {' '}
-            {filteredCountries[country] ? 'X' : ''}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <FormControl component="fieldset" key={region}>
+      <FormLabel component="legend">{region}</FormLabel>
+      <FormGroup>
+        {countries.map((country) => {
+          const checkbox = (
+            <Checkbox
+              checked={filteredCountries[country]}
+              size="small"
+              name={country}
+              color="primary"
+              onChange={() => onFilterToggle(country)}
+            />
+          );
+
+          return <FormControlLabel key={country} control={checkbox} label={country} />;
+        })}
+      </FormGroup>
+    </FormControl>
   ));
 
   return (
