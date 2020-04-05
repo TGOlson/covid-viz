@@ -24,6 +24,11 @@ const mapNormalizeDays = (cutoff, values) => values.map((item) => {
   return { ...item, data };
 });
 
+const filterZeroValues = ({ id, data }) => ({
+  id,
+  data: data.filter(({ y }) => y !== 0),
+});
+
 class LineChart extends React.Component {
   constructor(props) {
     const { enableLogScale, enableNormalizeDays } = props;
@@ -58,7 +63,15 @@ class LineChart extends React.Component {
 
     const { logScale, normalizeDays } = this.state;
 
-    const data = normalizeDays ? mapNormalizeDays(enableNormalizeDays, initialData) : initialData;
+    let data = initialData;
+    if (normalizeDays) {
+      data = mapNormalizeDays(enableNormalizeDays, data);
+    }
+
+    if (logScale) {
+      // filter zero values
+      data = data.map(filterZeroValues);
+    }
 
     const dimension = size === 'large'
       ? { height: '500px', maxWidth: '800px' }

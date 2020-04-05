@@ -33,6 +33,16 @@ const csvOptions = ({
   mapValues: ({ header, index, value }) => { // eslint-disable-line no-unused-vars
     if (isDateString(header)) return parseInt(value, 10);
 
+    if (header === 'id') {
+      switch (value) {
+        case 'Korea, South': return 'S. Korea';
+        case 'Taiwan*': return 'Taiwan';
+        case 'United Kingdom': return 'UK';
+
+        default: return value;
+      }
+    }
+
     return value;
   },
 });
@@ -59,8 +69,7 @@ const createDataAray = (row) => {
   const data = dateKeys.map((key) => ({
     x: key,
     y: row[key],
-  }), []).filter((d) => d.y !== 0); // filter zero values
-    // TODO: this is required for log scale, are zero values useful elsewhere?
+  }), []);
 
   return { id: row.id, data };
 };

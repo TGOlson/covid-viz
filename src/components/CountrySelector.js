@@ -19,11 +19,11 @@ const groupings = [
   },
   {
     region: 'Europe',
-    countries: ['United Kingdom', 'Spain', 'France', 'Germany', 'Italy', 'Switzerland', 'Belgium', 'Netherlands'],
+    countries: ['UK', 'Spain', 'France', 'Germany', 'Italy', 'Switzerland', 'Belgium', 'Netherlands'],
   },
   {
     region: 'APAC',
-    countries: ['Singapore', 'Taiwan', 'Japan', 'Korea, South', 'Australia'],
+    countries: ['Singapore', 'Taiwan', 'Japan', 'S. Korea', 'Australia'],
   },
 ];
 
@@ -44,10 +44,6 @@ function CountrySelector({ allCountries, filteredCountries, onFilterToggle }) {
       </ul>
     </div>
   ));
-
-  // const other = <div>
-  //
-  // </div>
 
   return (
     <div style={{ display: 'inline-flex' }}>

@@ -5,12 +5,12 @@ const INITIAL_STATE = {
   filteredCountries: {
     Italy: true,
     US: true,
-    'United Kingdom': true,
+    UK: true,
     Singapore: true,
-    France: true,
+    France: false,
     Spain: true,
-    Germany: true,
-    'Korea, South': true,
+    Germany: false,
+    'S. Korea': true,
   },
 };
 
