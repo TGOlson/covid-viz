@@ -1,8 +1,7 @@
 const INITIAL_STATE = {
   cases: null,
   deaths: null,
-  filteredCountries: ['Italy', 'US', 'United Kingdom', 'Singapore', 'France', 'Spain', 'Germany'],
-  logScale: true,
+  filteredCountries: ['Italy', 'US', 'United Kingdom', 'Singapore', 'France', 'Spain', 'Germany', 'Korea, South'],
 };
 
 export default (state = INITIAL_STATE, action) => {

@@ -11,7 +11,8 @@ const COLUMNS_TO_MAP = {
   'Country/Region': 'id',
 };
 
-const isDataString = (s) => /\d{4}-\d{1,2}-\d{1,2}/.test(s);
+const isDateString = (s) => !isNaN(s);
+// const isDateString = (s) => /\d{4}-\d{1,2}-\d{1,2}/.test(s);
 
 const csvOptions = ({
   mapHeaders: ({ header, index }) => { // eslint-disable-line no-unused-vars
@@ -20,9 +21,9 @@ const csvOptions = ({
 
     // m/d/y where month and day can be one or two digits
     if (/\d{1,2}\/\d{1,2}\/\d{2}/.test(header)) {
-      const [m, d, year] = header.split('/');
+      // const [m, d, year] = header.split('/');
       // TODO: pad month and day to two digits?
-      return `20${year}-${m}-${d}`;
+      return new Date(header).getTime();
     }
 
     console.warn('Header not transformed:', header); // eslint-disable-line no-console
@@ -30,7 +31,7 @@ const csvOptions = ({
     return header;
   },
   mapValues: ({ header, index, value }) => { // eslint-disable-line no-unused-vars
-    if (isDataString(header)) return parseInt(value, 10);
+    if (isDateString(header)) return parseInt(value, 10);
 
     return value;
   },
@@ -39,10 +40,10 @@ const csvOptions = ({
 const combineRowsById = (accum, row) => {
   const prevValue = accum[row.id] || {};
 
-  const dateKeys = Object.keys(row).filter(isDataString);
+  const dateKeys = Object.keys(row).filter(isDateString);
 
-  const nextValue = dateKeys.reduce((accum, key) => ({
-    ...accum,
+  const nextValue = dateKeys.reduce((acc, key) => ({
+    ...acc,
     [key]: row[key] + (prevValue[key] || 0),
   }), { id: row.id });
 
@@ -53,7 +54,7 @@ const combineRowsById = (accum, row) => {
 };
 
 const createDataAray = (row) => {
-  const dateKeys = Object.keys(row).filter(isDataString);
+  const dateKeys = Object.keys(row).filter(isDateString);
 
   const data = dateKeys.map((key) => ({
     x: key,
@@ -68,8 +69,7 @@ const fetchGlobalData = (url) => fetch(url)
   .then((res) => res.text())
   .then((x) => parseCsv(x, csvOptions))
   .then((csv) => Object.values(csv.reduce(combineRowsById, {}))
-    .map(createDataAray)
-    .reduce((accum, row) => ({ ...accum, [row.id]: row }), {}));
+    .map(createDataAray));
 
 export const fetchGlobalCases = () => (dispatch) => fetchGlobalData(GLOBAL_CASES_URL)
   .then((rows) => dispatch({
