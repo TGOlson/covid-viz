@@ -2,12 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ResponsiveLine } from '@nivo/line';
 import {
-  Container, Paper, Button, ButtonGroup, Grid,
+  Container, Paper, Button, ButtonGroup, Grid, Typography,
 } from '@material-ui/core';
 
 import { ChartData } from '../propTypes';
 
 const propTypes = {
+  title: PropTypes.string,
+  description: PropTypes.string,
+  updatedAt: PropTypes.number.isRequired,
   size: PropTypes.oneOf(['small', 'large']).isRequired,
   data: ChartData.isRequired,
   enableLogScale: PropTypes.bool,
@@ -15,6 +18,8 @@ const propTypes = {
 };
 
 const defaultProps = {
+  title: null,
+  description: null,
   enableLogScale: false,
   enableNormalizeDays: null,
 };
@@ -61,7 +66,7 @@ class LineChart extends React.Component {
 
   render() {
     const {
-      size, data: initialData, enableLogScale, enableNormalizeDays,
+      title, description, updatedAt, size, data: initialData, enableLogScale, enableNormalizeDays,
     } = this.props;
 
     const { logScale, normalizeDays } = this.state;
@@ -106,7 +111,7 @@ class LineChart extends React.Component {
       orient: 'bottom',
       tickSize: 5,
       tickPadding: 5,
-      tickRotation: -66,
+      // tickRotation: -66,
       tickValues: 10,
       format: xFormat,
       legend: 'Number of days since Nth case',
@@ -148,11 +153,13 @@ class LineChart extends React.Component {
       }],
     };
 
+    const noop = () => {};
+
     const logScaleButton = enableLogScale
       ? (
         <ButtonGroup variant="text" size="small" color="primary" aria-label="contained primary button group">
-          <Button disabled={logScale} onClick={this.onLogScaleToggle}>Log scale</Button>
-          <Button disabled={!logScale} onClick={this.onLogScaleToggle}>Linear scale</Button>
+          <Button style={{ textDecoration: logScale ? 'underline' : null }} onClick={logScale ? noop : this.onLogScaleToggle}>Log scale</Button>
+          <Button style={{ textDecoration: logScale ? null : 'underline' }} onClick={logScale ? this.onLogScaleToggle : noop}>Linear scale</Button>
         </ButtonGroup>
       )
       : null;
@@ -160,10 +167,10 @@ class LineChart extends React.Component {
     const normalizeDaysButton = enableNormalizeDays
       ? (
         <ButtonGroup variant="text" size="small" color="primary" aria-label="contained primary button group">
-          <Button disabled={normalizeDays} onClick={this.onNormalizeDaysToggle}>
+          <Button style={{ textDecoration: normalizeDays ? 'underline' : null }} onClick={normalizeDays ? noop : this.onNormalizeDaysToggle}>
             Normalized days
           </Button>
-          <Button disabled={!normalizeDays} onClick={this.onNormalizeDaysToggle}>
+          <Button style={{ textDecoration: normalizeDays ? null : 'underline' }} onClick={normalizeDays ? this.onNormalizeDaysToggle : noop}>
             Absolute timeline
           </Button>
         </ButtonGroup>
@@ -172,7 +179,23 @@ class LineChart extends React.Component {
 
 
     return (
-      <Container size="md" disableGutters>
+      <Container size="md" disableGutters style={{ marginTop: '12px', marginBottom: '36px' }}>
+        {title ? <Typography variant="h2" gutterBottom>{title}</Typography> : null}
+        {description ? <Typography variant="body2" gutterBottom>{description}</Typography> : null}
+        <Typography
+          variant="caption"
+          display="block"
+          gutterBottom
+          style={{
+            textAlign: 'center', fontStyle: 'italic', marginBottom: '12px', marginTop: '6px',
+          }}
+        >
+          Data last updated at
+          {' '}
+          {new Date(updatedAt).toLocaleDateString()}
+          .
+        </Typography>
+
         <Paper style={{ marginTop: '12px', marginBottom: '6px' }}>
           <Container style={dimension} disableGutters>
             <ResponsiveLine
@@ -199,7 +222,7 @@ class LineChart extends React.Component {
             />
           </Container>
         </Paper>
-        <Grid container justify="center" spacing={8}>
+        <Grid container justify="space-between" spacing={8}>
           <Grid item>{logScaleButton}</Grid>
           <Grid item>{normalizeDaysButton}</Grid>
         </Grid>

@@ -15,3 +15,7 @@ Deploy
 ```
 $ npm run deploy
 ```
+
+Additional metrics
+* testing vs hospital rates vs icu vs deaths
+* pie chart of testing vs positive vs negative

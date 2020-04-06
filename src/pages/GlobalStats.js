@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Container, Typography } from '@material-ui/core';
 
 import { ChartData } from '../propTypes';
 import CountrySelector from '../components/CountrySelector';
@@ -79,11 +78,15 @@ function GlobalOverview(props) {
         onFilterToggle={onFilterToggle}
       />
 
-
-      <Container maxWidth="md" disableGutters>
-        <Typography variant="h2" gutterBottom>Global Cases</Typography>
-        <Typography variant="body2">
-          Overview of coronavirus cases around the world.
+      <LineChart
+        title="Global Cases"
+        updatedAt={new Date('4/1/2020').getTime()}
+        size="large"
+        data={filteredCases}
+        enableLogScale
+        enableNormalizeDays={50}
+        description={
+          `Overview of coronavirus cases around the world.
           This shows at a high level, how quickly the virus has spread globally.
           It is most useful when viewed on a log scale to see the magnitude of increase,
           as well as a normalized day series to compare rate across countries.
@@ -91,18 +94,26 @@ function GlobalOverview(props) {
           One thing to keep in mind when viewing global case counts
           is that many countries have different testing standards,
           as well as capacities. This means that confirmed cases might differ
-          substantially from actual case counts in certain countries.
-        </Typography>
-        <Typography variant="caption" display="block" gutterBottom style={{ textAlign: 'center', fontStyle: 'italic', marginBottom: '12px' }}>
-          Data last updated at 7:34 a.m. on April 5, 2020.
-        </Typography>
-        <LineChart size="large" data={filteredCases} enableLogScale enableNormalizeDays={50} />
+          substantially from actual case counts in certain countries.`
+        }
+      />
 
-      </Container>
-
-      <h3>Global Deaths</h3>
-      <p>Overview of coronavirus deaths around the world.</p>
-      <LineChart size="large" data={filteredDeaths} enableLogScale enableNormalizeDays={10} />
+      <LineChart
+        title="Global Deaths"
+        updatedAt={new Date('4/1/2020').getTime()}
+        size="large"
+        data={filteredDeaths}
+        enableLogScale
+        enableNormalizeDays={10}
+        description={
+          `Overview of coronavirus deaths around the world.
+          This is another view on how the virus has spread around the world.
+          It is likely a much more lagging indicator than global cases
+          (possibly on the order of 1-2 weeks), but also might offer a slightly less biased
+          view on impact per region, as deaths are more likely to be
+          accurately tracked than overall cases.`
+        }
+      />
 
       <h3>Day over day changes</h3>
       <p>Percent day over day change in cases and deaths around the world;</p>
