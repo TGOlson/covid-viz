@@ -179,7 +179,7 @@ class LineChart extends React.Component {
 
 
     return (
-      <Container size="md" disableGutters style={{ marginTop: '12px', marginBottom: '36px' }}>
+      <Container size="md" disableGutters style={{ marginTop: '12px', marginBottom: '48px' }}>
         {title ? <Typography variant="h2" gutterBottom>{title}</Typography> : null}
         {description ? <Typography variant="body2" gutterBottom>{description}</Typography> : null}
         <Typography
@@ -196,7 +196,10 @@ class LineChart extends React.Component {
           .
         </Typography>
 
-        <Paper style={{ marginTop: '12px', marginBottom: '6px' }}>
+        <Paper style={{
+          marginTop: '12px', marginBottom: '6px', margin: 'auto', ...(size === 'small' ? dimension : {}),
+        }}
+        >
           <Container style={dimension} disableGutters>
             <ResponsiveLine
               data={data}

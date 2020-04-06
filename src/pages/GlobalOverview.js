@@ -1,22 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Typography } from '@material-ui/core';
+
 
 import { ChartData } from '../propTypes';
-import CountrySelector from '../components/CountrySelector';
 import LineChart from '../components/LineChart';
 
 
 const propTypes = {
-  allCountries: PropTypes.arrayOf(PropTypes.string),
   filteredCountries: PropTypes.objectOf(PropTypes.bool).isRequired,
   cases: ChartData,
   deaths: ChartData,
-  dispatch: PropTypes.func.isRequired,
+  // dispatch: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
-  allCountries: null,
   cases: null,
   deaths: null,
 };
@@ -39,7 +38,7 @@ const filterBeforeDate = (date) => ({ id, data }) => ({
 
 function GlobalOverview(props) {
   const {
-    allCountries, filteredCountries, cases, deaths,
+    filteredCountries, cases, deaths,
   } = props;
 
   if (!cases || !deaths) {
@@ -48,11 +47,6 @@ function GlobalOverview(props) {
 
   const filteredCases = cases.filter(({ id }) => filteredCountries[id]);
   const filteredDeaths = deaths.filter(({ id }) => filteredCountries[id]);
-
-  const onFilterToggle = (country) => props.dispatch({
-    type: 'TOGGLE_COUNTRY_FILTER',
-    country,
-  });
 
   const dayOverDayChangeInCases = filteredCases.map(computeDayOverDayChange).map(filterBeforeDate('3/5/2020'));
   const dayOverDayChangeInDeaths = filteredDeaths.map(computeDayOverDayChange).map(filterBeforeDate('3/5/2020'));
@@ -72,12 +66,6 @@ function GlobalOverview(props) {
 
   return (
     <div>
-      <CountrySelector
-        filteredCountries={filteredCountries}
-        allCountries={allCountries}
-        onFilterToggle={onFilterToggle}
-      />
-
       <LineChart
         title="Global Cases"
         updatedAt={new Date('4/1/2020').getTime()}
@@ -115,16 +103,31 @@ function GlobalOverview(props) {
         }
       />
 
-      <h3>Day over day changes</h3>
-      <p>Percent day over day change in cases and deaths around the world;</p>
+      <Typography variant="h2" gutterBottom>Day Overy Day Changes</Typography>
+      <Typography variant="body2" gutterBottom>
+        Rate change from previous day. Potentially noisy on a day-by-day basis but useful
+        to get a sense of directional trends. Lines converging on 10% day-over-day growth
+        means cases or deaths double roughly every week. Lines converging on 20% 10%
+        day-over-day growth means cases or deaths double roughly every 3-4 days.
+        Note: only shows data after March 5th.
+      </Typography>
       <div>
-        <LineChart size="small" data={dayOverDayChangeInCases} />
-        <LineChart size="small" data={dayOverDayChangeInDeaths} />
+        <LineChart size="small" updatedAt={new Date('4/1/2020').getTime()} data={dayOverDayChangeInCases} />
+        <LineChart size="small" updatedAt={new Date('4/1/2020').getTime()} data={dayOverDayChangeInDeaths} />
       </div>
 
-      <h3>Mortality Rate</h3>
-      <p>Mortality around the world.</p>
-      <LineChart size="large" data={mortalityRate} />
+      <LineChart
+        title="Mortality Rate"
+        updatedAt={new Date('4/1/2020').getTime()}
+        size="large"
+        data={mortalityRate}
+        description={
+          `Cumulative total mortality rate by day, defined as cumulative deaths over cases per country.
+          A spike upwards could indicate either medical failures or reduced testing capacity,
+          while a spike downwards could indicate increased medical capacity or increased testing.
+          Note: only shows data after March 5th.`
+        }
+      />
     </div>
   );
 }
@@ -135,7 +138,6 @@ GlobalOverview.defaultProps = defaultProps;
 const mapStateToProps = ({ global }) => ({
   cases: global.cases,
   deaths: global.deaths,
-  allCountries: global.allCountries,
   filteredCountries: global.filteredCountries,
 });
 

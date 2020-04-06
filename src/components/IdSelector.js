@@ -6,6 +6,11 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 // import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const propTypes = {
   allCountries: PropTypes.arrayOf(PropTypes.string),
@@ -25,7 +30,11 @@ const groupings = [
   },
   {
     region: 'Europe',
-    countries: ['UK', 'Spain', 'France', 'Germany', 'Italy', 'Switzerland', 'Belgium', 'Netherlands'],
+    countries: ['UK', 'Spain', 'France', 'Germany'],
+  },
+  {
+    region: 'Europe',
+    countries: ['Italy', 'Switzerland', 'Belgium', 'Netherlands'],
   },
   {
     region: 'APAC',
@@ -33,11 +42,13 @@ const groupings = [
   },
 ];
 
+// TODO: this assumes country toggle only
+// Eventually need to add state toggle
 function CountrySelector({ allCountries, filteredCountries, onFilterToggle }) {
-  if (!allCountries) return <p>loading...</p>;
+  // todo: add a search bar for all countries or something
 
   const defaultGroupings = groupings.map(({ region, countries }) => (
-    <FormControl component="fieldset" key={region}>
+    <FormControl component="fieldset" key={region} margin="dense" size="small">
       <FormLabel component="legend">{region}</FormLabel>
       <FormGroup>
         {countries.map((country) => {
@@ -58,9 +69,19 @@ function CountrySelector({ allCountries, filteredCountries, onFilterToggle }) {
   ));
 
   return (
-    <div style={{ display: 'inline-flex' }}>
-      {defaultGroupings}
-    </div>
+    <ExpansionPanel elevation="0">
+      <ExpansionPanelSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
+        <Typography variant="body1">Select countries...</Typography>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>
+        {defaultGroupings}
+      </ExpansionPanelDetails>
+    </ExpansionPanel>
+
   );
 }
 

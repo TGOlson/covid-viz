@@ -4,23 +4,18 @@ import { Container } from '@material-ui/core';
 
 import './App.css';
 
-import GlobalStats from './pages/GlobalStats';
-import UnitedStatesStats from './pages/UnitedStatesStats';
+import GlobalOverview from './pages/GlobalOverview';
+import UnitedStatesOverview from './pages/UnitedStatesOverview';
+import NavBar from './components/NavBar';
 
 function App() {
   return (
     <HashRouter basename="/">
-      <div>
-        <ul>
-          <li><Link to="/">Global</Link></li>
-          <li><Link to="/unitedstates">United States</Link></li>
-        </ul>
-        <hr />
-        <Container maxWidth="md">
-          <Route exact path="/" component={GlobalStats} />
-          <Route path="/unitedstates" component={UnitedStatesStats} />
-        </Container>
-      </div>
+      <Container maxWidth="md">
+        <NavBar />
+        <Route exact path="/" component={GlobalOverview} />
+        <Route path="/united-states" component={UnitedStatesOverview} />
+      </Container>
     </HashRouter>
   );
 }
