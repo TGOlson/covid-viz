@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ResponsiveLine } from '@nivo/line';
-import {
-  Container, Paper, Button, ButtonGroup, Grid, Typography,
-} from '@material-ui/core';
-
+import Container from '@material-ui/core/Container';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import deepEqual from 'deep-equal';
 import { ChartData } from '../propTypes';
 
 const propTypes = {
@@ -45,7 +48,30 @@ class LineChart extends React.Component {
     this.state = {
       logScale: enableLogScale,
       normalizeDays: !!enableNormalizeDays,
+      chart: null,
     };
+  }
+
+  // A little trickery in these lifecycle methods in order to render the chart
+  // outside of the current render cycle.
+  // Chart is slow and heavy to re-render,
+  // so we want to avoid batching with other updates that should be fast
+  componentDidMount() {
+    this.renderChart();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const propChange = !deepEqual(prevProps, this.props);
+
+    // This is a little sketchy... we need to see if state changed but comparing the
+    // chart would lead to an infitine loop
+    // (because state changes lead to chart changes lead to state changes)
+    // So as a quick fix just remove the chart value for comparision
+    const stateChange = !deepEqual({ ...prevState, chart: null }, { ...this.state, chart: null });
+
+    if (propChange || stateChange) {
+      this.renderChart();
+    }
   }
 
   onLogScaleToggle = () => {
@@ -64,9 +90,9 @@ class LineChart extends React.Component {
     });
   }
 
-  render() {
+  renderChart() {
     const {
-      title, description, updatedAt, size, data: initialData, enableLogScale, enableNormalizeDays,
+      data: initialData, enableNormalizeDays,
     } = this.props;
 
     const { logScale, normalizeDays } = this.state;
@@ -80,10 +106,6 @@ class LineChart extends React.Component {
       // filter zero values
       data = data.map(filterZeroValues);
     }
-
-    const dimension = size === 'large'
-      ? { height: '500px', maxWidth: '800px' }
-      : { height: '300px', maxWidth: '500px' };
 
     const xScale = {
       type: 'linear',
@@ -153,6 +175,47 @@ class LineChart extends React.Component {
       }],
     };
 
+    const chart = (
+      <ResponsiveLine
+        data={data}
+        margin={{
+          top: 50, right: 110, bottom: 50, left: 60,
+        }}
+        xScale={xScale}
+        yScale={yScale}
+        xFormat={xFormat}
+        axisBottom={axisBottom}
+        gridYValues={gridYValues}
+        axisLeft={axisLeft}
+        isInteractive
+// pointSize={6}
+        useMesh
+        enableGridX={false}
+// sliceTooltip={(slice) => {
+//   console.log(slice)
+//   return <p>foo</p>;
+// }}
+        enableSlices="x"
+        legends={[legend]}
+      />
+    );
+
+    // Render chart into DOM outside of current render cycle
+    setTimeout(() => this.setState({ chart }), 0);
+  }
+
+  render() {
+    const {
+      title, description, updatedAt, size, enableLogScale, enableNormalizeDays,
+    } = this.props;
+    const { chart } = this.state;
+
+    const { logScale, normalizeDays } = this.state;
+
+    const dimension = size === 'large'
+      ? { height: '500px', maxWidth: '800px' }
+      : { height: '300px', maxWidth: '500px' };
+
     const noop = () => {};
 
     const logScaleButton = enableLogScale
@@ -180,7 +243,7 @@ class LineChart extends React.Component {
 
     return (
       <Container size="md" disableGutters style={{ marginTop: '12px', marginBottom: '48px' }}>
-        {title ? <Typography variant="h2" gutterBottom>{title}</Typography> : null}
+        {title ? <Typography variant="h4" gutterBottom>{title}</Typography> : null}
         {description ? <Typography variant="body2" gutterBottom>{description}</Typography> : null}
         <Typography
           variant="caption"
@@ -201,28 +264,7 @@ class LineChart extends React.Component {
         }}
         >
           <Container style={dimension} disableGutters>
-            <ResponsiveLine
-              data={data}
-              margin={{
-                top: 50, right: 110, bottom: 50, left: 60,
-              }}
-              xScale={xScale}
-              yScale={yScale}
-              xFormat={xFormat}
-              axisBottom={axisBottom}
-              gridYValues={gridYValues}
-              axisLeft={axisLeft}
-              isInteractive
-    // pointSize={6}
-              useMesh
-              enableGridX={false}
-    // sliceTooltip={(slice) => {
-    //   console.log(slice)
-    //   return <p>foo</p>;
-    // }}
-              enableSlices="x"
-              legends={[legend]}
-            />
+            {chart}
           </Container>
         </Paper>
         <Grid container justify="space-between" spacing={8}>

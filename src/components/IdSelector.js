@@ -1,20 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import FormHelperText from '@material-ui/core/FormHelperText';
-import Checkbox from '@material-ui/core/Checkbox';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import CheckIcon from '@material-ui/icons/Check';
+
 
 const propTypes = {
-  allCountries: PropTypes.arrayOf(PropTypes.string),
-  filteredCountries: PropTypes.objectOf(PropTypes.bool).isRequired,
+  // allCountries: PropTypes.arrayOf(PropTypes.string),
+  filteredIds: PropTypes.objectOf(PropTypes.bool).isRequired,
   onFilterToggle: PropTypes.func.isRequired,
 };
 
@@ -30,11 +26,7 @@ const groupings = [
   },
   {
     region: 'Europe',
-    countries: ['UK', 'Spain', 'France', 'Germany'],
-  },
-  {
-    region: 'Europe',
-    countries: ['Italy', 'Switzerland', 'Belgium', 'Netherlands'],
+    countries: ['UK', 'Spain', 'France', 'Germany', 'Italy', 'Switzerland', 'Belgium', 'Netherlands'],
   },
   {
     region: 'APAC',
@@ -44,45 +36,47 @@ const groupings = [
 
 // TODO: this assumes country toggle only
 // Eventually need to add state toggle
-function CountrySelector({ allCountries, filteredCountries, onFilterToggle }) {
-  // todo: add a search bar for all countries or something
 
-  const defaultGroupings = groupings.map(({ region, countries }) => (
-    <FormControl component="fieldset" key={region} margin="dense" size="small">
-      <FormLabel component="legend">{region}</FormLabel>
-      <FormGroup>
-        {countries.map((country) => {
-          const checkbox = (
-            <Checkbox
-              checked={filteredCountries[country]}
-              size="small"
-              name={country}
-              color="primary"
-              onChange={() => onFilterToggle(country)}
-            />
-          );
+class CountrySelector extends React.Component {
+  constructor(props) {
+    super(props);
 
-          return <FormControlLabel key={country} control={checkbox} label={country} />;
-        })}
-      </FormGroup>
-    </FormControl>
-  ));
+    this.state = {
+      filteredIds: props.filteredIds,
+    };
+  }
 
-  return (
-    <ExpansionPanel elevation="0">
-      <ExpansionPanelSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <Typography variant="body1">Select countries...</Typography>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
-        {defaultGroupings}
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+  onFilterToggle = (id) => {
+    const filteredIds = {
+      ...this.state.filteredIds,
+      [id]: !this.state.filteredIds[id],
+    };
 
-  );
+    this.setState({
+      filteredIds,
+    }, () => this.props.onFilterToggle(id));
+  }
+
+  render() {
+    const { filteredIds } = this.state;
+
+    const subheader = (region) => <ListSubheader disableSticky component="div">{region}</ListSubheader>;
+
+    const icon = <ListItemIcon><CheckIcon color="primary" fontSize="small" /></ListItemIcon>;
+
+    const item = (id) => (
+      <ListItem key={id} button onClick={() => this.onFilterToggle(id)}>
+        <ListItemText key={id} primary={id} style={{ marginLeft: '24px' }} />
+        {filteredIds[id] ? icon : null}
+      </ListItem>
+    );
+
+    return groupings.map(({ region, countries }) => (
+      <List component="nav" key={region} dense subheader={subheader(region)}>
+        {countries.map(item)}
+      </List>
+    ));
+  }
 }
 
 CountrySelector.propTypes = propTypes;
