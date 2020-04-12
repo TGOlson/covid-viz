@@ -1,28 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ResponsiveLine } from '@nivo/line';
-import Container from '@material-ui/core/Container';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+
 import deepEqual from 'deep-equal';
+
 import { ChartData } from '../propTypes';
 
 const propTypes = {
-  title: PropTypes.string,
-  description: PropTypes.string,
-  updatedAt: PropTypes.number.isRequired,
-  size: PropTypes.oneOf(['small', 'large']).isRequired,
   data: ChartData.isRequired,
   enableLogScale: PropTypes.bool,
   enableNormalizeDays: PropTypes.number,
 };
 
 const defaultProps = {
-  title: null,
-  description: null,
   enableLogScale: false,
   enableNormalizeDays: null,
 };
@@ -72,22 +62,6 @@ class LineChart extends React.Component {
     if (propChange || stateChange) {
       this.renderChart();
     }
-  }
-
-  onLogScaleToggle = () => {
-    const { logScale } = this.state;
-
-    this.setState({
-      logScale: !logScale,
-    });
-  }
-
-  onNormalizeDaysToggle = () => {
-    const { normalizeDays } = this.state;
-
-    this.setState({
-      normalizeDays: !normalizeDays,
-    });
   }
 
   renderChart() {
@@ -205,74 +179,9 @@ class LineChart extends React.Component {
   }
 
   render() {
-    const {
-      title, description, updatedAt, size, enableLogScale, enableNormalizeDays,
-    } = this.props;
     const { chart } = this.state;
 
-    const { logScale, normalizeDays } = this.state;
-
-    const dimension = size === 'large'
-      ? { height: '500px', maxWidth: '800px' }
-      : { height: '300px', maxWidth: '500px' };
-
-    const noop = () => {};
-
-    const logScaleButton = enableLogScale
-      ? (
-        <ButtonGroup variant="text" size="small" color="primary" aria-label="contained primary button group">
-          <Button style={{ textDecoration: logScale ? 'underline' : null }} onClick={logScale ? noop : this.onLogScaleToggle}>Log scale</Button>
-          <Button style={{ textDecoration: logScale ? null : 'underline' }} onClick={logScale ? this.onLogScaleToggle : noop}>Linear scale</Button>
-        </ButtonGroup>
-      )
-      : null;
-
-    const normalizeDaysButton = enableNormalizeDays
-      ? (
-        <ButtonGroup variant="text" size="small" color="primary" aria-label="contained primary button group">
-          <Button style={{ textDecoration: normalizeDays ? 'underline' : null }} onClick={normalizeDays ? noop : this.onNormalizeDaysToggle}>
-            Normalized days
-          </Button>
-          <Button style={{ textDecoration: normalizeDays ? null : 'underline' }} onClick={normalizeDays ? this.onNormalizeDaysToggle : noop}>
-            Absolute timeline
-          </Button>
-        </ButtonGroup>
-      )
-      : null;
-
-
-    return (
-      <Container size="md" disableGutters style={{ marginTop: '12px', marginBottom: '48px' }}>
-        {title ? <Typography variant="h4" gutterBottom>{title}</Typography> : null}
-        {description ? <Typography variant="body2" gutterBottom>{description}</Typography> : null}
-        <Typography
-          variant="caption"
-          display="block"
-          gutterBottom
-          style={{
-            textAlign: 'center', fontStyle: 'italic', marginBottom: '12px', marginTop: '6px',
-          }}
-        >
-          Data last updated at
-          {' '}
-          {new Date(updatedAt).toLocaleDateString()}
-          .
-        </Typography>
-
-        <Paper style={{
-          marginTop: '12px', marginBottom: '6px', margin: 'auto', ...(size === 'small' ? dimension : {}),
-        }}
-        >
-          <Container style={dimension} disableGutters>
-            {chart}
-          </Container>
-        </Paper>
-        <Grid container justify="space-between" spacing={8}>
-          <Grid item>{logScaleButton}</Grid>
-          <Grid item>{normalizeDaysButton}</Grid>
-        </Grid>
-      </Container>
-    );
+    return chart;
   }
 }
 

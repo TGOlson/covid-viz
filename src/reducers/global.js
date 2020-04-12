@@ -2,15 +2,15 @@ const INITIAL_STATE = {
   cases: null,
   deaths: null,
   allCountries: null,
-  filteredCountries: {
+  filters: {
     Italy: true,
     US: true,
     UK: true,
     Singapore: true,
     France: false,
-    Spain: true,
+    Spain: false,
     Germany: false,
-    'S. Korea': true,
+    'S. Korea': false,
   },
 };
 
@@ -33,9 +33,9 @@ export default (state = INITIAL_STATE, action) => {
     case 'TOGGLE_COUNTRY_FILTER':
       return {
         ...state,
-        filteredCountries: {
-          ...state.filteredCountries,
-          [action.country]: !state.filteredCountries[action.country],
+        filters: {
+          ...state.filters,
+          [action.country]: !state.filters[action.country],
         },
       };
 

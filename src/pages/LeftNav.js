@@ -10,7 +10,7 @@ import IdSelector from '../components/IdSelector';
 
 const propTypes = {
   // allCountries: PropTypes.arrayOf(PropTypes.string),
-  filteredCountries: PropTypes.objectOf(PropTypes.bool).isRequired,
+  filters: PropTypes.objectOf(PropTypes.bool).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
@@ -19,7 +19,7 @@ const defaultProps = {
 };
 
 const Left = (props) => {
-  const { dispatch, filteredCountries } = props;
+  const { dispatch, filters } = props;
 
   // TODO: this assumes country toggle only
   // Eventually need to add state toggle and swap sets on route
@@ -36,7 +36,7 @@ const Left = (props) => {
         PaperProps={{ style: { width: '240px' } }}
       >
         <Divider style={{ marginTop: '64px', marginRight: '24px' }} />
-        <IdSelector filteredIds={filteredCountries} onFilterToggle={onFilterToggle} />
+        <IdSelector filteredIds={filters} onFilterToggle={onFilterToggle} />
       </Drawer>
     </nav>
   );
@@ -47,7 +47,7 @@ Left.defaultProps = defaultProps;
 
 const mapStateToProps = ({ global }) => ({
   allCountries: global.allCountries,
-  filteredCountries: global.filteredCountries,
+  filters: global.filters,
 });
 
 export default connect(mapStateToProps)(Left);
