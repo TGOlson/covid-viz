@@ -7,7 +7,9 @@ import App from './App';
 
 import './index.css';
 
-import { fetchGlobalCases, fetchGlobalDeaths } from './actions/global';
+import {
+  fetchGlobalCases, fetchGlobalDeaths, fetchGlobalDeathsTimestamp, fetchGlobalCasesTimestamp,
+} from './actions/global';
 
 ReactDOM.render(
   <Provider store={store}>
@@ -19,6 +21,8 @@ ReactDOM.render(
 Promise.all([
   store.dispatch(fetchGlobalCases()),
   store.dispatch(fetchGlobalDeaths()),
+  store.dispatch(fetchGlobalDeathsTimestamp()),
+  store.dispatch(fetchGlobalCasesTimestamp()),
 ]).then(() => store.dispatch({
   type: 'GLOBAL_DATA_LOADED',
 }));

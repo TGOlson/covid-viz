@@ -1,4 +1,6 @@
-import { filteredCases, filteredDeaths } from './accessors';
+import {
+  filteredCases, filteredDeaths, deathsTimestamp, casesTimestamp,
+} from './accessors';
 
 const computeDayOverDayChange = ({ id, data }) => {
   const changes = data.map(({ x, y }, index) => {
@@ -32,9 +34,6 @@ const mortalityRate = (reducer) => filteredDeaths(reducer).map(({ id, data: deat
   return { id, data: mortalityData };
 }).map(filterBeforeDate('3/5/2020'));
 
-// const getUpdatedAt = (reducer) => new Date().getTime();
-const getUpdatedAt = () => new Date().getTime();
-
 export const defaultChartId = 'deaths-cumulative';
 
 export const spec = {
@@ -44,7 +43,7 @@ export const spec = {
     group: 'Deaths',
     label: 'Cumulative',
     getData: filteredDeaths,
-    getUpdatedAt,
+    getUpdatedAt: deathsTimestamp,
     logScale: true,
     normalizeDays: 10,
   },
@@ -53,16 +52,16 @@ export const spec = {
     group: 'Deaths',
     label: 'Rate of Change',
     getData: dayOverDayChangeInDeaths,
-    getUpdatedAt,
+    getUpdatedAt: deathsTimestamp,
   },
 
   // cases
   'cases-cumulative': {
+    title: 'Cumulative Global Cases',
     group: 'Cases',
     label: 'Cumulative',
     getData: filteredCases,
-    getUpdatedAt,
-    title: 'Cumulative Global Cases',
+    getUpdatedAt: casesTimestamp,
     logScale: true,
     normalizeDays: 50,
   },
@@ -71,7 +70,7 @@ export const spec = {
     group: 'Cases',
     label: 'Rate of Change',
     getData: dayOverDayChangeInCases,
-    getUpdatedAt,
+    getUpdatedAt: casesTimestamp,
   },
 
   // other
@@ -80,6 +79,7 @@ export const spec = {
     group: 'Other',
     label: 'Mortality Rate',
     getData: mortalityRate,
-    getUpdatedAt,
+    // TODO: should really take most recent of the two
+    getUpdatedAt: deathsTimestamp,
   },
 };

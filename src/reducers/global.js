@@ -3,7 +3,9 @@ import { initialChartState } from '../data-specs/utils';
 
 const INITIAL_STATE = {
   cases: null,
+  casesTimestamp: null,
   deaths: null,
+  deathsTimestamp: null,
   allCountries: null,
   filters: {
     Italy: true,
@@ -60,6 +62,18 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
       };
+
+    case 'GLOBAL_DEATHS_TIMESTAMP_LOADED':
+      return {
+        ...state,
+        deathsTimestamp: action.value
+      }
+
+    case 'GLOBAL_CASES_TIMESTAMP_LOADED':
+      return {
+        ...state,
+        casesTimestamp: action.value
+      }
 
     default: return state;
   }

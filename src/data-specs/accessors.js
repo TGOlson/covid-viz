@@ -2,7 +2,9 @@
   Assumes reducer shape of
   {
     cases: ChartData,
+    casesTimestamp: string,
     deaths: ChartData,
+    deathsTimestamp, string,
     filters: {string: bool}
   }
 */
@@ -23,3 +25,6 @@ const withFilters = (baseAccessor) => (reducer) => {
 
 export const filteredDeaths = withFilters(deaths);
 export const filteredCases = withFilters(cases);
+
+export const deathsTimestamp = (reducer) => reducer.deathsTimestamp;
+export const casesTimestamp = (reducer) => reducer.casesTimestamp;

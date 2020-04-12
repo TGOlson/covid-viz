@@ -1,5 +1,7 @@
 import parseCsv from 'neat-csv';
-import { GLOBAL_CASES_URL, GLOBAL_DEATHS_URL } from './const';
+import {
+  GLOBAL_CASES_URL, GLOBAL_DEATHS_URL, GLOBAL_DEATHS_TIMESTAMP_URL, GLOBAL_CASES_TIMESTAMP_URL,
+} from './const';
 
 const COLUMNS_TO_DROP = {
   'Province/State': true,
@@ -86,8 +88,25 @@ export const fetchGlobalCases = () => (dispatch) => fetchGlobalData(GLOBAL_CASES
     values: rows,
   }));
 
+
 export const fetchGlobalDeaths = () => (dispatch) => fetchGlobalData(GLOBAL_DEATHS_URL)
   .then((rows) => dispatch({
     type: 'FETCHED_GLOBAL_DEATHS',
     values: rows,
+  }));
+
+const fetchTimestamp = (url) => fetch(url)
+  .then((res) => res.json())
+  .then((res) => (res[0] ? res[0].commit.committer.date : null));
+
+export const fetchGlobalDeathsTimestamp = () => (dispatch) => fetchTimestamp(GLOBAL_DEATHS_TIMESTAMP_URL)
+  .then((timestamp) => dispatch({
+    type: 'GLOBAL_DEATHS_TIMESTAMP_LOADED',
+    value: timestamp,
+  }));
+
+export const fetchGlobalCasesTimestamp = () => (dispatch) => fetchTimestamp(GLOBAL_CASES_TIMESTAMP_URL)
+  .then((timestamp) => dispatch({
+    type: 'GLOBAL_CASES_TIMESTAMP_LOADED',
+    value: timestamp,
   }));

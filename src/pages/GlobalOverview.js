@@ -61,9 +61,24 @@ const GlobalOverview = (props) => {
     value: { chartId, update: { [key]: !chartState[key] } },
   });
 
+  const date = new Date(updatedAt);
+
+  const timePart = date.toLocaleTimeString([], { hour12: true, hour: '2-digit', minute: '2-digit' });
+  const datePart = date.toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' });
+
   return renderContainer(
     <div>
-      <Typography variant="h4" style={{ marginBottom: '12px', flex: 'auto' }}>{chartSpec.title}</Typography>
+      <Typography variant="h4" style={{ marginBottom: '12px', textAlign: 'center' }}>{chartSpec.title}</Typography>
+      <Typography
+        variant="caption"
+        display="block"
+        gutterBottom
+        style={{
+          textAlign: 'center', fontStyle: 'italic', marginBottom: '12px', marginTop: '12px',
+        }}
+      >
+        {`Data as of ${timePart} on ${datePart}.`}
+      </Typography>
       <FormGroup id="chart-toggles" row style={{ flexDirection: 'row-reverse', marginBottom: '6px' }}>
         <FormControlLabel
           control={<Switch size="small" checked={chartState.logScale} onChange={() => onControlToggle('logScale')} />}
@@ -101,7 +116,10 @@ const GlobalOverview = (props) => {
           textAlign: 'center', fontStyle: 'italic', marginBottom: '12px', marginTop: '12px',
         }}
       >
-        {`Data last updated at ${new Date(updatedAt).toLocaleDateString()}.`}
+        Source:
+        {' '}
+        <a target="_blank" rel="noopener noreferrer" href="https://github.com/CSSEGISandData/COVID-19">Center for Systems Science and Engineering at Johns Hopkins University</a>
+        .
       </Typography>
     </div>,
   );
