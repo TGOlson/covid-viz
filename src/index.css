@@ -20,9 +20,9 @@ body {
 
 #right-nav {
   position: sticky;
-  top: 70px;
-  margin-top: 70px;
-  height: calc(100vh - 70px);
+  top: 86px;
+  margin-top: 86px;
+  height: calc(100vh - 86px);
   padding: 16px 16px 16px 0;
   width: 160px;
   flex-shrink: 0;
@@ -38,4 +38,24 @@ body {
   padding-left: 48px;
   padding-right: 48px;
   width: calc(100% - 160px);
+}
+
+#chart-toggles .MuiFormControlLabel-label {
+  font-size: 0.875em;
+}
+
+.right-nav-item a {
+  font-size: 13px;
+  padding: 4px 0px 4px 8px;
+  border-left: 4px solid transparent;
+  display: block;
+}
+
+.right-nav-item a:hover {
+  border-left: 4px solid #eeeeee;
+}
+
+.right-nav-item a.active {
+  border-left: 4px solid #e0e0e0;
+  color: rgba(0, 0, 0, 0.87);
 }

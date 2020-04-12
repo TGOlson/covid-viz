@@ -1,3 +1,6 @@
+import { spec } from '../data-specs/global';
+import { initialChartState } from '../data-specs/utils';
+
 const INITIAL_STATE = {
   cases: null,
   deaths: null,
@@ -12,6 +15,8 @@ const INITIAL_STATE = {
     Germany: false,
     'S. Korea': false,
   },
+  chartState: initialChartState(spec),
+  loading: true, // TODO: use this
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -29,7 +34,6 @@ export default (state = INITIAL_STATE, action) => {
         deaths: action.values,
       };
 
-
     case 'TOGGLE_COUNTRY_FILTER':
       return {
         ...state,
@@ -37,6 +41,24 @@ export default (state = INITIAL_STATE, action) => {
           ...state.filters,
           [action.country]: !state.filters[action.country],
         },
+      };
+
+    case 'GLOBAL_FORM_CONTROL_TOGGLE':
+      return {
+        ...state,
+        chartState: {
+          ...state.chartState,
+          [action.value.chartId]: {
+            ...state.chartState[action.value.chartId],
+            ...action.value.update,
+          },
+        },
+      };
+
+    case 'GLOBAL_DATA_LOADED':
+      return {
+        ...state,
+        loading: false,
       };
 
     default: return state;

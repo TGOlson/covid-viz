@@ -8,13 +8,13 @@ import { ChartData } from '../propTypes';
 
 const propTypes = {
   data: ChartData.isRequired,
-  enableLogScale: PropTypes.bool,
-  enableNormalizeDays: PropTypes.number,
+  logScale: PropTypes.bool,
+  normalizeDays: PropTypes.number,
 };
 
 const defaultProps = {
-  enableLogScale: false,
-  enableNormalizeDays: null,
+  logScale: false,
+  normalizeDays: null,
 };
 
 const mapNormalizeDays = (cutoff, values) => values.map((item) => {
@@ -32,12 +32,9 @@ const filterZeroValues = ({ id, data }) => ({
 
 class LineChart extends React.Component {
   constructor(props) {
-    const { enableLogScale, enableNormalizeDays } = props;
     super(props);
 
     this.state = {
-      logScale: enableLogScale,
-      normalizeDays: !!enableNormalizeDays,
       chart: null,
     };
   }
@@ -66,14 +63,12 @@ class LineChart extends React.Component {
 
   renderChart() {
     const {
-      data: initialData, enableNormalizeDays,
+      data: initialData, logScale, normalizeDays,
     } = this.props;
-
-    const { logScale, normalizeDays } = this.state;
 
     let data = initialData;
     if (normalizeDays) {
-      data = mapNormalizeDays(enableNormalizeDays, data);
+      data = mapNormalizeDays(normalizeDays, data);
     }
 
     if (logScale) {
@@ -88,7 +83,7 @@ class LineChart extends React.Component {
     };
 
     const yScale = logScale
-      ? { type: 'log', base: 10, max: 300000 } // todo find max automatically
+      ? { type: 'log', base: 10, max: 1000000 } // todo find max automatically
       : { type: 'linear', min: 0, max: 'auto' };
 
     const xFormat = normalizeDays

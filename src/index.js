@@ -16,5 +16,9 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
-store.dispatch(fetchGlobalCases());
-store.dispatch(fetchGlobalDeaths());
+Promise.all([
+  store.dispatch(fetchGlobalCases()),
+  store.dispatch(fetchGlobalDeaths()),
+]).then(() => store.dispatch({
+  type: 'GLOBAL_DATA_LOADED',
+}));

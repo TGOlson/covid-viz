@@ -8,3 +8,9 @@ export const toNavSpec = (spec) => Object.values(Object.keys(spec).reduce((accum
     [group]: { group, pages: updatedPages },
   };
 }, {}));
+
+export const initialChartState = (spec) => Object.keys(spec).reduce((accum, id) => ({
+  ...accum,
+  // normalizeDays always false for now, allow users to toggle on
+  [id]: { logScale: !!spec[id].logScale, normalizeDays: false },
+}), {});

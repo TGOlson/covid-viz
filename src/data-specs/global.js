@@ -54,8 +54,6 @@ export const spec = {
     label: 'Rate of Change',
     getData: dayOverDayChangeInDeaths,
     getUpdatedAt,
-    logScale: true,
-    normalizeDays: 10,
   },
 
   // cases
@@ -65,6 +63,8 @@ export const spec = {
     getData: filteredCases,
     getUpdatedAt,
     title: 'Cumulative Global Cases',
+    logScale: true,
+    normalizeDays: 50,
   },
   'cases-change-rate': {
     title: ' Global Cases Daily Rate of Change',
