@@ -7,9 +7,7 @@ import App from './App';
 
 import './index.css';
 
-import {
-  fetchGlobalCases, fetchGlobalDeaths, fetchGlobalDeathsTimestamp, fetchGlobalCasesTimestamp,
-} from './actions/global';
+import { fetchGlobalData, fetchUSData } from './actions';
 
 ReactDOM.render(
   <Provider store={store}>
@@ -18,11 +16,10 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
-Promise.all([
-  store.dispatch(fetchGlobalCases()),
-  store.dispatch(fetchGlobalDeaths()),
-  store.dispatch(fetchGlobalDeathsTimestamp()),
-  store.dispatch(fetchGlobalCasesTimestamp()),
-]).then(() => store.dispatch({
+store.dispatch(fetchGlobalData()).then(() => store.dispatch({
   type: 'GLOBAL_DATA_LOADED',
+}));
+
+store.dispatch(fetchUSData()).then(() => store.dispatch({
+  type: 'US_DATA_LOADED',
 }));

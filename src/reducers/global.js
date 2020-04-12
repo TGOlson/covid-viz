@@ -23,17 +23,29 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'FETCHED_GLOBAL_CASES':
+    case 'FETCHED_DATASET_global_deaths':
       return {
         ...state,
-        allCountries: action.values.map((x) => x.id),
-        cases: action.values,
+        deaths: action.value,
       };
 
-    case 'FETCHED_GLOBAL_DEATHS':
+    case 'FETCHED_DATASET_global_confirmed':
       return {
         ...state,
-        deaths: action.values,
+        allCountries: action.value.map((x) => x.id),
+        cases: action.value,
+      };
+
+    case 'FETCHED_TIMESTAMP_global_deaths':
+      return {
+        ...state,
+        deathsTimestamp: action.value,
+      };
+
+    case 'FETCHED_TIMESTAMP_global_confirmed':
+      return {
+        ...state,
+        casesTimestamp: action.value,
       };
 
     case 'TOGGLE_COUNTRY_FILTER':
@@ -45,7 +57,7 @@ export default (state = INITIAL_STATE, action) => {
         },
       };
 
-    case 'GLOBAL_FORM_CONTROL_TOGGLE':
+    case 'FORM_CONTROL_TOGGLE_global':
       return {
         ...state,
         chartState: {
@@ -62,18 +74,6 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
       };
-
-    case 'GLOBAL_DEATHS_TIMESTAMP_LOADED':
-      return {
-        ...state,
-        deathsTimestamp: action.value
-      }
-
-    case 'GLOBAL_CASES_TIMESTAMP_LOADED':
-      return {
-        ...state,
-        casesTimestamp: action.value
-      }
 
     default: return state;
   }

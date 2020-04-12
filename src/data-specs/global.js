@@ -48,7 +48,7 @@ export const spec = {
     normalizeDays: 10,
   },
   'deaths-change-rate': {
-    title: ' Global Deaths Daily Rate of Change',
+    title: 'Global Deaths Daily Rate of Change',
     group: 'Deaths',
     label: 'Rate of Change',
     getData: dayOverDayChangeInDeaths,
@@ -66,7 +66,7 @@ export const spec = {
     normalizeDays: 50,
   },
   'cases-change-rate': {
-    title: ' Global Cases Daily Rate of Change',
+    title: 'Global Cases Daily Rate of Change',
     group: 'Cases',
     label: 'Rate of Change',
     getData: dayOverDayChangeInCases,

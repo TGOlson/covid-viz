@@ -7,6 +7,10 @@ import LeftNav from './pages/LeftNav';
 import UnitedStatesOverview from './pages/UnitedStatesOverview';
 
 import NavBar from './components/NavBar';
+import RightNav from './components/RightNav';
+
+import { spec } from './data-specs/global';
+import { toNavSpec } from './data-specs/utils';
 
 function App() {
   return (
@@ -17,6 +21,7 @@ function App() {
         <Route exact path="/" component={About} />
         <Route path="/global" component={GlobalOverview} />
         <Route path="/united-states" component={UnitedStatesOverview} />
+        <RightNav base="/global" spec={toNavSpec(spec)} />
       </div>
     </HashRouter>
   );
