@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -11,9 +11,9 @@ const NavBar = () => (
     <Toolbar>
       <Typography variant="h6" style={{ flex: 'auto' }}>Covid Dashboard</Typography>
       <div>
-        <Button color="inherit" component={Link} to="/">About</Button>
-        <Button color="inherit" component={Link} to="/global">Global</Button>
-        <Button color="inherit" component={Link} to="/united-states">United States</Button>
+        <Button color="inherit" component={NavLink} activeClassName="active" to="/">About</Button>
+        <Button color="inherit" component={NavLink} activeClassName="active" to="/global">Global</Button>
+        <Button color="inherit" component={NavLink} activeClassName="active" to="/united-states">United States</Button>
       </div>
     </Toolbar>
   </AppBar>

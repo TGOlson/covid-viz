@@ -1,5 +1,7 @@
 import React from 'react';
-import { HashRouter, Route } from 'react-router-dom';
+import {
+  HashRouter, Route, Switch, Redirect,
+} from 'react-router-dom';
 
 import About from './pages/About';
 import LeftNav from './pages/LeftNav';
@@ -13,9 +15,12 @@ function App() {
       <div style={{ display: 'flex' }}>
         <NavBar />
         <LeftNav />
-        <Route exact path="/" component={About} />
-        <Route path="/global" component={VizPage} />
-        <Route path="/united-states" component={VizPage} />
+        <Switch>
+          <Route exact path="/" component={About} />
+          <Route path="/global" component={VizPage} />
+          <Route path="/united-states" component={VizPage} />
+          <Route render={() => <Redirect to="/" />} />
+        </Switch>
       </div>
     </HashRouter>
   );

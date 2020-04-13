@@ -11,6 +11,7 @@ export const toNavSpec = (spec) => Object.values(Object.keys(spec).reduce((accum
 
 export const initialChartState = (spec) => Object.keys(spec).reduce((accum, id) => ({
   ...accum,
+  // logScale always false for now, allow users to toggle on
   // normalizeDays always false for now, allow users to toggle on
-  [id]: { logScale: !!spec[id].logScale, normalizeDays: false },
+  [id]: { logScale: false, normalizeDays: false },
 }), {});

@@ -52,14 +52,12 @@ const FormattedLineChart = (props) => {
 
   return (
     <div>
-      <Typography variant="h4" style={{ marginBottom: '12px', textAlign: 'center' }}>{title}</Typography>
+      <Typography variant="h4" style={{ marginBottom: '12px' }}>{title}</Typography>
       <Typography
         variant="caption"
         display="block"
         gutterBottom
-        style={{
-          textAlign: 'center', fontStyle: 'italic', marginBottom: '12px', marginTop: '12px',
-        }}
+        style={{ fontStyle: 'italic', marginBottom: '12px', marginTop: '12px' }}
       >
         {updatedAtString}
       </Typography>

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavLink as RouterLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import List from '@material-ui/core/List';
 import Link from '@material-ui/core/Link';
@@ -57,7 +57,7 @@ const RightNav = ({ spec, base }) => (
               color="textSecondary"
               underline="none"
               variant="body1"
-              component={RouterLink}
+              component={NavLink}
               to={`${base}/${id}`}
               activeClassName="active"
             >

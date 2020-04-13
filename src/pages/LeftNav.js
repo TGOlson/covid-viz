@@ -54,6 +54,16 @@ const LeftNav = (props) => {
     id,
   });
 
+  const selector = reducer
+    ? (
+      <IdSelector
+        filteredIds={filters}
+        idGroupings={idGroupings}
+        onFilterToggle={onFilterToggle}
+      />
+    )
+    : null;
+
   return (
     <nav id="left-nav">
       <Drawer
@@ -62,11 +72,7 @@ const LeftNav = (props) => {
         PaperProps={{ style: { width: '240px' } }}
       >
         <Divider style={{ marginTop: '64px', marginRight: '24px' }} />
-        <IdSelector
-          filteredIds={filters}
-          idGroupings={idGroupings}
-          onFilterToggle={onFilterToggle}
-        />
+        {selector}
       </Drawer>
     </nav>
   );
