@@ -57,13 +57,13 @@ const fetchTimestamp = (location, dataset) => octokit.repos.listCommits({
     return null;
   });
 
-export default (location, dataset) => (dispatch) => Promise.all([
-  fetchData(location, dataset).then((rows) => dispatch({
-    type: `FETCHED_DATASET_${location}_${dataset}`,
+export default (namespace, dataset) => (dispatch) => Promise.all([
+  fetchData(namespace, dataset).then((rows) => dispatch({
+    type: `${namespace}_FETCHED_DATASET_${dataset}`,
     value: rows,
   })),
-  fetchTimestamp(location, dataset).then((timestamp) => dispatch({
-    type: `FETCHED_TIMESTAMP_${location}_${dataset}`,
+  fetchTimestamp(namespace, dataset).then((timestamp) => dispatch({
+    type: `${namespace}_FETCHED_TIMESTAMP_${dataset}`,
     value: timestamp,
   })),
 ]);

@@ -11,6 +11,7 @@ import CheckIcon from '@material-ui/icons/Check';
 const propTypes = {
   // allCountries: PropTypes.arrayOf(PropTypes.string),
   filteredIds: PropTypes.objectOf(PropTypes.bool).isRequired,
+  idGroupings: PropTypes.array.isRequired,
   onFilterToggle: PropTypes.func.isRequired,
 };
 
@@ -18,68 +19,28 @@ const defaultProps = {
   allCountries: null,
 };
 
-// Default groupings
-const groupings = [
-  {
-    region: 'Americas',
-    countries: ['US', 'Canada', 'Mexico', 'Brazil'],
-  },
-  {
-    region: 'Europe',
-    countries: ['UK', 'Spain', 'France', 'Germany', 'Italy', 'Switzerland', 'Belgium', 'Netherlands'],
-  },
-  {
-    region: 'APAC',
-    countries: ['Singapore', 'Taiwan', 'Japan', 'S. Korea', 'Australia'],
-  },
-];
+const IdSelector = (props) => {
+  const { filteredIds, idGroupings, onFilterToggle } = props;
 
-// TODO: this assumes country toggle only
-// Eventually need to add state toggle
+  const subheader = (label) => <ListSubheader disableSticky component="div">{label}</ListSubheader>;
 
-class CountrySelector extends React.Component {
-  constructor(props) {
-    super(props);
+  const icon = <ListItemIcon><CheckIcon color="primary" fontSize="small" /></ListItemIcon>;
 
-    this.state = {
-      filteredIds: props.filteredIds,
-    };
-  }
+  const item = (id) => (
+    <ListItem key={id} button onClick={() => onFilterToggle(id)}>
+      <ListItemText key={id} primary={id} style={{ marginLeft: '24px' }} />
+      {filteredIds[id] ? icon : null}
+    </ListItem>
+  );
 
-  onFilterToggle = (id) => {
-    const filteredIds = {
-      ...this.state.filteredIds,
-      [id]: !this.state.filteredIds[id],
-    };
+  return idGroupings.map(({ label, ids }) => (
+    <List component="nav" key={label} dense subheader={subheader(label)}>
+      {ids.map(item)}
+    </List>
+  ));
+};
 
-    this.setState({
-      filteredIds,
-    }, () => this.props.onFilterToggle(id));
-  }
+IdSelector.propTypes = propTypes;
+IdSelector.defaultProps = defaultProps;
 
-  render() {
-    const { filteredIds } = this.state;
-
-    const subheader = (region) => <ListSubheader disableSticky component="div">{region}</ListSubheader>;
-
-    const icon = <ListItemIcon><CheckIcon color="primary" fontSize="small" /></ListItemIcon>;
-
-    const item = (id) => (
-      <ListItem key={id} button onClick={() => this.onFilterToggle(id)}>
-        <ListItemText key={id} primary={id} style={{ marginLeft: '24px' }} />
-        {filteredIds[id] ? icon : null}
-      </ListItem>
-    );
-
-    return groupings.map(({ region, countries }) => (
-      <List component="nav" key={region} dense subheader={subheader(region)}>
-        {countries.map(item)}
-      </List>
-    ));
-  }
-}
-
-CountrySelector.propTypes = propTypes;
-CountrySelector.defaultProps = defaultProps;
-
-export default CountrySelector;
+export default IdSelector;

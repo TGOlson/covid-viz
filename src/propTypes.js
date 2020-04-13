@@ -18,3 +18,13 @@ export const Reducer = PropTypes.shape({
     }),
   ).isRequired,
 });
+
+export const ChartSpec = PropTypes.shape({
+  title: PropTypes.string,
+  group: PropTypes.string,
+  label: PropTypes.string,
+  getData: PropTypes.func,
+  getUpdatedAt: PropTypes.func,
+  logScale: PropTypes.bool,
+  normalizeDays: PropTypes.number,
+});

@@ -1,31 +1,57 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 
-
-import PropTypes from 'prop-types';
-
 import IdSelector from '../components/IdSelector';
+import { GLOBAL, US } from '../actions/const';
 
 const propTypes = {
   // allCountries: PropTypes.arrayOf(PropTypes.string),
-  filters: PropTypes.objectOf(PropTypes.bool).isRequired,
+  // filters: PropTypes.objectOf(PropTypes.bool).isRequired,
+  store: PropTypes.any.isRequired,
   dispatch: PropTypes.func.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
 };
 
 const defaultProps = {
   // allCountries: null,
 };
 
-const Left = (props) => {
-  const { dispatch, filters } = props;
+// TODO: should pass some state around!
+// Think this would include hooking react-router into the store
+const getNamespace = (path) => {
+  switch (path.split('/')[1]) {
+    case 'global': return GLOBAL;
+    case 'united-states': return US;
+    default: return null; // Expected for non-data pages
+  }
+};
 
-  // TODO: this assumes country toggle only
-  // Eventually need to add state toggle and swap sets on route
-  const onFilterToggle = (country) => dispatch({
-    type: 'TOGGLE_COUNTRY_FILTER',
-    country,
+const getReducer = (namespace, store) => {
+  switch (namespace) {
+    case GLOBAL: return store.global;
+    case US: return store.US; // TODO;
+    default: throw new Error(`Unexpected match fail 'getReducer': ${namespace}`);
+  }
+};
+
+const LeftNav = (props) => {
+  const { store, dispatch, location } = props;
+
+  // TODO: this is a pretty sketchy way to inspect store state
+  const namespace = getNamespace(location.pathname);
+  const reducer = namespace && getReducer(namespace, store);
+  const { filters, allIds, idGroupings } = reducer || {};
+
+  const onFilterToggle = (id) => dispatch({
+    type: `${namespace}_TOGGLE_ID_FILTER`,
+    id,
   });
 
   return (
@@ -36,18 +62,19 @@ const Left = (props) => {
         PaperProps={{ style: { width: '240px' } }}
       >
         <Divider style={{ marginTop: '64px', marginRight: '24px' }} />
-        <IdSelector filteredIds={filters} onFilterToggle={onFilterToggle} />
+        <IdSelector
+          filteredIds={filters}
+          idGroupings={idGroupings}
+          onFilterToggle={onFilterToggle}
+        />
       </Drawer>
     </nav>
   );
 };
 
-Left.propTypes = propTypes;
-Left.defaultProps = defaultProps;
+LeftNav.propTypes = propTypes;
+LeftNav.defaultProps = defaultProps;
 
-const mapStateToProps = ({ global }) => ({
-  allCountries: global.allCountries,
-  filters: global.filters,
-});
+const mapStateToProps = (store) => ({ store });
 
-export default connect(mapStateToProps)(Left);
+export default withRouter(connect(mapStateToProps)(LeftNav));

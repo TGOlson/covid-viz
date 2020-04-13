@@ -2,11 +2,7 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import logger from 'redux-logger';
 
-import globalReducer from './reducers/global';
-
-const reducer = combineReducers({
-  global: globalReducer,
-});
+import reducer from './reducers/reducer';
 
 export default createStore(
   reducer,

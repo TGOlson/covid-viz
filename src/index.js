@@ -16,10 +16,5 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
-store.dispatch(fetchGlobalData()).then(() => store.dispatch({
-  type: 'GLOBAL_DATA_LOADED',
-}));
-
-store.dispatch(fetchUSData()).then(() => store.dispatch({
-  type: 'US_DATA_LOADED',
-}));
+store.dispatch(fetchGlobalData());
+store.dispatch(fetchUSData());
