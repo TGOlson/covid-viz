@@ -5,8 +5,7 @@ import {
   GLOBAL, dataUrl, path, OWNER, REPO,
 } from './const';
 
-import globalCsvOptions from './global-csv-options';
-import usCsvOptions from './us-csv-options';
+import { csvOptions, globalConfig, usConfig } from './csv-options';
 
 const octokit = new Octokit();
 
@@ -28,7 +27,7 @@ const combineRowsById = (accum, row) => {
   };
 };
 
-const createDataAray = (row) => {
+const createDataArray = (row) => {
   const dateKeys = Object.keys(row).filter(isDateString);
 
   const data = dateKeys.map((key) => ({
@@ -41,9 +40,14 @@ const createDataAray = (row) => {
 
 const fetchData = (location, dataset) => fetch(dataUrl(location, dataset))
   .then((res) => res.text())
-  .then((x) => parseCsv(x, (location === GLOBAL ? globalCsvOptions : usCsvOptions)))
+  .then((x) => {
+    const config = location === GLOBAL ? globalConfig : usConfig;
+    const options = csvOptions(config);
+
+    return parseCsv(x, options);
+  })
   .then((csv) => Object.values(csv.reduce(combineRowsById, {}))
-    .map(createDataAray));
+    .map(createDataArray));
 
 const fetchTimestamp = (location, dataset) => octokit.repos.listCommits({
   owner: OWNER,

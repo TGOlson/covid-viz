@@ -1,8 +1,10 @@
-import * as Global from '../data-specs/global';
-import * as US from '../data-specs/united-states';
+import { GLOBAL, US } from '../actions/const';
+import * as GlobalDataSpec from '../data-specs/global';
+import * as USDataSpec from '../data-specs/united-states';
+
 import { initialChartState } from '../data-specs/utils';
 
-const initialState = ({ filters, spec, idGroupings }) => ({
+const makeInitialState = ({ filters, spec, idGroupings }) => ({
   cases: null,
   casesTimestamp: null,
   deaths: null,
@@ -14,39 +16,34 @@ const initialState = ({ filters, spec, idGroupings }) => ({
   loading: true,
 });
 
-const INITIAL_STATE = {
-  global: initialState(Global),
-  US: initialState(US),
-};
-
-const runReducer = (state, action) => {
+const makeReducer = (namespace, initialState) => (state = initialState, action) => {
   switch (action.type) {
-    case 'FETCHED_DATASET_deaths':
+    case `${namespace}_FETCHED_DATASET_deaths`:
       return {
         ...state,
         deaths: action.value,
       };
 
-    case 'FETCHED_DATASET_confirmed':
+    case `${namespace}_FETCHED_DATASET_confirmed`:
       return {
         ...state,
         allIds: action.value.map((x) => x.id),
         cases: action.value,
       };
 
-    case 'FETCHED_TIMESTAMP_deaths':
+    case `${namespace}_FETCHED_TIMESTAMP_deaths`:
       return {
         ...state,
         deathsTimestamp: action.value,
       };
 
-    case 'FETCHED_TIMESTAMP_confirmed':
+    case `${namespace}_FETCHED_TIMESTAMP_confirmed`:
       return {
         ...state,
         casesTimestamp: action.value,
       };
 
-    case 'TOGGLE_ID_FILTER':
+    case `${namespace}_TOGGLE_ID_FILTER`:
       return {
         ...state,
         filters: {
@@ -55,7 +52,7 @@ const runReducer = (state, action) => {
         },
       };
 
-    case 'FORM_CONTROL_TOGGLE':
+    case `${namespace}_FORM_CONTROL_TOGGLE`:
       return {
         ...state,
         chartState: {
@@ -67,7 +64,7 @@ const runReducer = (state, action) => {
         },
       };
 
-    case 'DATA_LOADED':
+    case `${namespace}_DATA_LOADED`:
       return {
         ...state,
         loading: false,
@@ -77,29 +74,5 @@ const runReducer = (state, action) => {
   }
 };
 
-export default (state = INITIAL_STATE, action) => {
-  if (action.type.startsWith('global_')) {
-    const localAction = {
-      ...action,
-      type: action.type.replace('global_', ''),
-    };
-
-    const localState = runReducer(state.global, localAction);
-
-    return { ...state, global: localState };
-  }
-
-  if (action.type.startsWith('US_')) {
-    const localAction = {
-      ...action,
-      type: action.type.replace('US_', ''),
-    };
-
-    const localState = runReducer(state.US, localAction);
-
-    return { ...state, US: localState };
-  }
-
-  console.error('Unexpected action type', action.type);
-  return state;
-};
+export const globalReducer = makeReducer(GLOBAL, makeInitialState(GlobalDataSpec));
+export const usReducer = makeReducer(US, makeInitialState(USDataSpec));

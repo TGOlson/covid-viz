@@ -24,7 +24,7 @@ export const idGroupings = [
   },
   {
     label: 'APAC',
-    ids: ['Singapore', 'Taiwan', 'Japan', 'S. Korea', 'Australia'],
+    ids: ['Singapore', 'Taiwan', 'Japan', 'South Korea', 'Australia'],
   },
 ];
 
