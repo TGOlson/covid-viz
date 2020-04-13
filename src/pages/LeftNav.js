@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
+import Typography from '@material-ui/core/Typography';
 
 import IdSelector from '../components/IdSelector';
 import { GLOBAL, US } from '../actions/const';
@@ -71,7 +72,17 @@ const LeftNav = (props) => {
         open
         PaperProps={{ style: { width: '240px' } }}
       >
-        <Divider style={{ marginTop: '64px', marginRight: '24px' }} />
+        <div style={{ display: 'flex' }}>
+          <div style={{
+            height: '64px',
+            paddingLeft: '16px',
+          }}
+          >
+            <Typography color="textSecondary" variant="h6" style={{ marginTop: '6px' }}>Covid Dashboard</Typography>
+            <Typography color="textSecondary" variant="body2" style={{ fontSize: '12px' }}>@tyguyo / GitHub</Typography>
+          </div>
+        </div>
+        <Divider style={{ marginRight: '24px' }} />
         {selector}
       </Drawer>
     </nav>

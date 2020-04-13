@@ -98,13 +98,14 @@ const VizPage = (props) => {
 
   return render(
     <FormattedLineChart
-        // from spec
+      // from spec
       title={chartSpec.title}
       data={data}
       updatedAt={updatedAt}
       logScaleToggle={chartSpec.logScale}
       normalizeDaysToggle={chartSpec.normalizeDays}
       chartState={chartState}
+      group={chartSpec.group}
 
         // from state
       logScale={chartState.logScale}

@@ -21,6 +21,7 @@ const propTypes = {
   logScale: PropTypes.bool.isRequired,
   normalizeDays: PropTypes.bool.isRequired,
   onControlToggle: PropTypes.func.isRequired,
+  group: PropTypes.string.isRequired,
 };
 
 const defaultProps = {
@@ -39,6 +40,7 @@ const FormattedLineChart = (props) => {
     logScale,
     normalizeDays,
     onControlToggle,
+    group,
   } = props;
 
   const date = new Date(updatedAt);
@@ -79,7 +81,7 @@ const FormattedLineChart = (props) => {
           marginTop: '12px',
           marginBottom: '6px',
           margin: 'auto',
-          padding: '0 32px 18px',
+          padding: '0 0 0 0',
         }}
       >
         <Container style={{ height: '500px', maxWidth: '800px' }} disableGutters>
@@ -87,6 +89,7 @@ const FormattedLineChart = (props) => {
             data={data}
             logScale={logScale}
             normalizeDays={normalizeDays ? normalizeDaysToggle : undefined}
+            group={group}
           />
         </Container>
       </Paper>

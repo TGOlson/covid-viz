@@ -10,6 +10,7 @@ const propTypes = {
   data: ChartData.isRequired,
   logScale: PropTypes.bool,
   normalizeDays: PropTypes.number,
+  group: PropTypes.string.isRequired,
 };
 
 const defaultProps = {
@@ -51,9 +52,9 @@ class LineChart extends React.Component {
     const propChange = !deepEqual(prevProps, this.props);
 
     // This is a little sketchy... we need to see if state changed but comparing the
-    // chart would lead to an infitine loop
+    // chart would lead to an infinite loop
     // (because state changes lead to chart changes lead to state changes)
-    // So as a quick fix just remove the chart value for comparision
+    // So as a quick fix just remove the chart value for comparison
     const stateChange = !deepEqual({ ...prevState, chart: null }, { ...this.state, chart: null });
 
     if (propChange || stateChange) {
@@ -63,7 +64,7 @@ class LineChart extends React.Component {
 
   renderChart() {
     const {
-      data: initialData, logScale, normalizeDays,
+      data: initialData, logScale, normalizeDays, group,
     } = this.props;
 
     let data = initialData;
@@ -98,15 +99,20 @@ class LineChart extends React.Component {
       ? [10, 100, 1000, 10000, 100000, 1000000, 10000000]
       : undefined;
 
+    const bottomLegend = normalizeDays
+      // super hacky formatting but what can you do
+      ? `Number of days since ${normalizeDays}th ${group.toLowerCase().slice(0, group.length - 1)}`
+      : 'Date';
+
     const axisBottom = {
       orient: 'bottom',
       tickSize: 5,
       tickPadding: 5,
-      // tickRotation: -66,
+      tickRotation: normalizeDays ? 0 : -40,
       tickValues: 10,
       format: xFormat,
-      legend: 'Number of days since Nth case',
-      legendOffset: 36,
+      legend: bottomLegend,
+      legendOffset: 50,
       legendPosition: 'middle',
     };
 
@@ -117,7 +123,7 @@ class LineChart extends React.Component {
       tickPadding: 5,
       tickRotation: 0,
       legend: 'Count',
-      legendOffset: -50,
+      legendOffset: -65,
       legendPosition: 'middle',
     };
 
@@ -135,20 +141,13 @@ class LineChart extends React.Component {
       symbolSize: 12,
       symbolShape: 'circle',
       symbolBorderColor: 'rgba(0, 0, 0, .5)',
-      effects: [{
-        on: 'hover',
-        style: {
-          itemBackground: 'rgba(0, 0, 0, .03)',
-          itemOpacity: 1,
-        },
-      }],
     };
 
     const chart = (
       <ResponsiveLine
         data={data}
         margin={{
-          top: 50, right: 110, bottom: 50, left: 60,
+          top: 50, right: 110, bottom: 65, left: 80,
         }}
         xScale={xScale}
         yScale={yScale}
@@ -157,14 +156,22 @@ class LineChart extends React.Component {
         gridYValues={gridYValues}
         axisLeft={axisLeft}
         isInteractive
-// pointSize={6}
+        // pointSize={4}
         useMesh
         enableGridX={false}
-// sliceTooltip={(slice) => {
-//   console.log(slice)
-//   return <p>foo</p>;
-// }}
-        enableSlices="x"
+        enableCrosshair={false}
+        // tooltip={({ point }) => {
+        //   console.log(point);
+        //   // id: "New York.72"
+        //   // index: 318
+        //   // serieId: "New York"
+        //   // serieColor: "#e8a838"
+        //   // x: 418
+        //   // y: 238
+        //   // color: "#e8a838"
+        //   // borderColor: "transparent"
+        //   return <p>foo</p>;
+        // }}
         legends={[legend]}
       />
     );
