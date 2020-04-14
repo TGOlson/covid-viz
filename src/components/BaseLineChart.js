@@ -11,11 +11,13 @@ const propTypes = {
   logScale: PropTypes.bool,
   normalizeDays: PropTypes.number,
   group: PropTypes.string.isRequired,
+  smallScreen: PropTypes.bool,
 };
 
 const defaultProps = {
   logScale: false,
   normalizeDays: null,
+  smallScreen: false,
 };
 
 const mapNormalizeDays = (cutoff, values) => values.map((item) => {
@@ -64,7 +66,7 @@ class LineChart extends React.Component {
 
   renderChart() {
     const {
-      data: initialData, logScale, normalizeDays, group,
+      data: initialData, logScale, normalizeDays, group, smallScreen,
     } = this.props;
 
     let data = initialData;
@@ -126,8 +128,6 @@ class LineChart extends React.Component {
       legendOffset: -65,
       legendPosition: 'middle',
     };
-
-    const smallScreen = false;
 
     const legend = {
       anchor: smallScreen ? 'top-left' : 'top-right',

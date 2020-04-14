@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import Hidden from '@material-ui/core/Hidden';
 
 import BaseLineChart from './BaseLineChart';
 
@@ -84,14 +85,27 @@ const FormattedLineChart = (props) => {
           padding: '0 0 0 0',
         }}
       >
-        <Container style={{ height: '500px', maxWidth: '800px' }} disableGutters>
-          <BaseLineChart
-            data={data}
-            logScale={logScale}
-            normalizeDays={normalizeDays ? normalizeDaysToggle : undefined}
-            group={group}
-          />
-        </Container>
+        <Hidden xsDown implementation="css">
+          <Container style={{ height: '500px', maxWidth: '800px' }} disableGutters>
+            <BaseLineChart
+              data={data}
+              logScale={logScale}
+              normalizeDays={normalizeDays ? normalizeDaysToggle : undefined}
+              group={group}
+            />
+          </Container>
+        </Hidden>
+        <Hidden smUp implementation="css">
+          <Container style={{ height: '500px', maxWidth: '800px' }} disableGutters>
+            <BaseLineChart
+              smallScreen
+              data={data}
+              logScale={logScale}
+              normalizeDays={normalizeDays ? normalizeDaysToggle : undefined}
+              group={group}
+            />
+          </Container>
+        </Hidden>
       </Paper>
       <Typography
         variant="caption"

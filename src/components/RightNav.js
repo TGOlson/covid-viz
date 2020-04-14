@@ -5,8 +5,6 @@ import { NavLink } from 'react-router-dom';
 import List from '@material-ui/core/List';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
-// import ListItemText from '@material-ui/core/ListItemText';
-// import ListSubheader from '@material-ui/core/ListSubheader';
 
 const propTypes = {
   spec: PropTypes.arrayOf(

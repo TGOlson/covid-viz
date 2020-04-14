@@ -65,6 +65,10 @@ const VizPage = (props) => {
   const reducer = getReducer(namespace, store);
   const basePath = match.path;
 
+
+  // xs = 600
+  // md = 960
+  // lg = 1280
   const render = (content) => (
     <div id="main-container">
       <Container maxWidth="md" id="main-content">

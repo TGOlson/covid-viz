@@ -13,26 +13,10 @@ body {
   width: calc(100% - 240px);
 }
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1280px) {
   #top-nav {
     width: 100%;
   }
-}
-
-
-#left-nav {
-  width: 240px;
-  flex-shrink: 0;
-}
-
-#right-nav {
-  position: sticky;
-  top: 86px;
-  margin-top: 86px;
-  height: calc(100vh - 86px);
-  padding: 16px 16px 16px 0;
-  width: 160px;
-  flex-shrink: 0;
 }
 
 #main-container {
@@ -40,9 +24,17 @@ body {
   display: flex;
 }
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1280px) {
   #main-container {
     width: 100%;
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  #main-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
   }
 }
 
@@ -51,6 +43,40 @@ body {
   padding-left: 48px;
   padding-right: 48px;
   width: calc(100% - 160px);
+}
+
+@media only screen and (max-width: 960px) {
+  #main-content {
+    padding: 24px;
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  #main-content {
+    padding: 6px;
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 961px) {
+  #right-nav {
+    position: sticky;
+    top: 86px;
+    margin-top: 86px;
+    height: calc(100vh - 86px);
+    padding: 16px 16px 16px 0;
+    width: 160px;
+    flex-shrink: 0;
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  #right-nav {
+    display: flex;
+    margin-top: 84px;
+    justify-content: space-around;
+  }
 }
 
 #chart-toggles .MuiFormControlLabel-label {

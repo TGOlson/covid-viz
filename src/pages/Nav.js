@@ -45,53 +45,82 @@ const getReducer = (namespace, store) => {
   }
 };
 
-const Nav = (props) => {
-  const { store, dispatch, location } = props;
+class Nav extends React.Component {
+  constructor(props) {
+    super(props);
 
-  // TODO: this is a pretty sketchy way to inspect store state
-  const namespace = getNamespace(location.pathname);
-  const reducer = namespace && getReducer(namespace, store);
-  const { filters, idGroupings } = reducer || {}; // allIds available as well
+    this.state = {
+      drawerOpen: false,
+    };
+  }
 
-  const onFilterToggle = (id) => dispatch({
-    type: `${namespace}_TOGGLE_ID_FILTER`,
-    id,
-  });
+  onMenuToggle = () => {
+    const { drawerOpen } = this.state;
 
-  const selector = reducer
-    ? (
-      <IdSelector
-        filteredIds={filters}
-        idGroupings={idGroupings}
-        onFilterToggle={onFilterToggle}
-      />
-    )
-    : null;
+    this.setState({
+      drawerOpen: !drawerOpen,
+    });
+  }
 
-  const onMenuToggle = () => console.log('menu toggle');
+  render() {
+    const { store, dispatch, location } = this.props;
+    const { drawerOpen } = this.state;
 
-  return (
-    <div>
-      <Hidden lgUp implementation="css">
-        <TopNavBar showMenuIcon onMenuToggle={onMenuToggle} />
-      </Hidden>
-      <Hidden mdDown implementation="css">
-        <TopNavBar onMenuToggle={onMenuToggle} />
-        <nav id="left-nav">
+    // TODO: this is a pretty sketchy way to inspect store state
+    const namespace = getNamespace(location.pathname);
+    const reducer = namespace && getReducer(namespace, store);
+    const { filters, idGroupings } = reducer || {}; // allIds available as well
+
+    const onFilterToggle = (id) => dispatch({
+      type: `${namespace}_TOGGLE_ID_FILTER`,
+      id,
+    });
+
+    const selector = reducer
+      ? (
+        <IdSelector
+          filteredIds={filters}
+          idGroupings={idGroupings}
+          onFilterToggle={onFilterToggle}
+        />
+      )
+      : null;
+
+
+    return (
+      <div>
+        <Hidden lgUp implementation="css">
+          <TopNavBar showMenuIcon onMenuToggle={this.onMenuToggle} />
+          <Drawer
+            variant="temporary"
+            anchor="left"
+            open={drawerOpen}
+            onClose={this.onMenuToggle}
+            PaperProps={{ style: { width: '240px' } }}
+            ModalProps={{ keepMounted: true }}
+          >
+            <NavHeader />
+            <Divider style={{ marginRight: '24px' }} />
+            {selector}
+          </Drawer>
+        </Hidden>
+        <Hidden mdDown implementation="css">
+          <TopNavBar onMenuToggle={this.onMenuToggle} />
           <Drawer
             variant="permanent"
             open
+            style={{ width: '240px' }}
             PaperProps={{ style: { width: '240px' } }}
           >
             <NavHeader />
             <Divider style={{ marginRight: '24px' }} />
             {selector}
           </Drawer>
-        </nav>
-      </Hidden>
-    </div>
-  );
-};
+        </Hidden>
+      </div>
+    );
+  }
+}
 
 Nav.propTypes = propTypes;
 Nav.defaultProps = defaultProps;

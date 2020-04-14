@@ -17,7 +17,6 @@ const defaultProps = {
   showMenuIcon: false,
 };
 
-
 const TopNavBar = ({ showMenuIcon, onMenuToggle }) => (
   <AppBar position="fixed" color="default" id="top-nav">
     <Toolbar>
@@ -32,9 +31,9 @@ const TopNavBar = ({ showMenuIcon, onMenuToggle }) => (
         </IconButton>
       ) : null}
       <div style={{ flex: 'auto' }} />
-      <Button color="inherit" component={NavLink} activeClassName="active" to="/united-states">United States</Button>
-      <Button color="inherit" component={NavLink} activeClassName="active" to="/global">Global</Button>
       <Button color="inherit" component={NavLink} activeClassName="active" to="/">About</Button>
+      <Button color="inherit" component={NavLink} activeClassName="active" to="/global">Global</Button>
+      <Button color="inherit" component={NavLink} activeClassName="active" to="/united-states">United States</Button>
     </Toolbar>
   </AppBar>
 );
