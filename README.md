@@ -18,9 +18,13 @@ $ npm run deploy
 
 Todo
 * move left drawer state to reducer
-* clean up tooltip
+* clean up graph tooltip
+* graph legend should use abbreviations on mobile
+* left drawer header bug on mobile
+* should height should be reduced on mobile
 * add daily counts
 * add table totals
+* add toggles/filters to url
 
 Additional metrics
 * testing vs hospital rates vs icu vs deaths
