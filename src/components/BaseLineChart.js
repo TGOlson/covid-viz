@@ -127,12 +127,14 @@ class LineChart extends React.Component {
       legendPosition: 'middle',
     };
 
+    const smallScreen = true;
+
     const legend = {
-      anchor: 'top-right',
-      direction: 'column',
+      anchor: smallScreen ? 'top-left' : 'top-right',
+      direction: smallScreen ? 'row' : 'column',
       justify: false,
-      translateX: 100,
-      translateY: 0,
+      translateX: smallScreen ? -45 : 100,
+      translateY: smallScreen ? -35 : 0,
       itemsSpacing: 0,
       itemDirection: 'left-to-right',
       itemWidth: 80,
@@ -147,7 +149,7 @@ class LineChart extends React.Component {
       <ResponsiveLine
         data={data}
         margin={{
-          top: 50, right: 110, bottom: 65, left: 80,
+          top: 50, right: smallScreen ? 30 : 110, bottom: 65, left: 80,
         }}
         xScale={xScale}
         yScale={yScale}

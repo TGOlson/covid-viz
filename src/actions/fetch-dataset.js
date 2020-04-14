@@ -1,13 +1,10 @@
 import parseCsv from 'neat-csv';
-import { Octokit } from '@octokit/rest';
 
 import {
-  GLOBAL, dataUrl, path, OWNER, REPO,
+  GLOBAL, dataUrl, timestampUrl,
 } from './const';
 
 import { csvOptions, globalConfig, usConfig } from './csv-options';
-
-const octokit = new Octokit();
 
 const isDateString = (s) => !isNaN(s); // eslint-disable-line no-restricted-globals
 
@@ -49,13 +46,9 @@ const fetchData = (location, dataset) => fetch(dataUrl(location, dataset))
   .then((csv) => Object.values(csv.reduce(combineRowsById, {}))
     .map(createDataArray));
 
-const fetchTimestamp = (location, dataset) => octokit.repos.listCommits({
-  owner: OWNER,
-  repo: REPO,
-  page: 1,
-  per_page: 1,
-  path: path(location, dataset),
-}).then(({ data }) => (data[0] ? data[0].commit.committer.date : null))
+const fetchTimestamp = (location, dataset) => fetch(timestampUrl(location, dataset))
+  .then((res) => res.json())
+  .then((data) => (data[0] ? data[0].commit.committer.date : null))
   .catch((err) => {
     console.error('Error fetching timestamps', err); // eslint-disable-line no-console
     return null;

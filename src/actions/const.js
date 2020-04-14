@@ -6,7 +6,7 @@ export const GLOBAL = 'global';
 export const DEATHS = 'deaths';
 export const CASES = 'confirmed';
 
-export const OWNER = 'CSSEGISandData'
+export const OWNER = 'CSSEGISandData';
 export const REPO = 'COVID-19';
 
 const BASE_DATA_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master';

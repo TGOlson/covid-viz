@@ -20,3 +20,4 @@ node_modules/
 # working dirs
 build/
 data/
+data_temp/
