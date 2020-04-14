@@ -86,7 +86,6 @@ class Nav extends React.Component {
       )
       : null;
 
-
     return (
       <div>
         <Hidden lgUp implementation="css">

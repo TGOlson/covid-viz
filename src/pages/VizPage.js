@@ -4,6 +4,9 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
+
 
 import RightNav from '../components/RightNav';
 import FormattedLineChart from '../components/FormattedLineChart';
@@ -87,7 +90,14 @@ const VizPage = (props) => {
   }
 
   if (reducer.loading) {
-    return render(<p>Loading...</p>);
+    return render(
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '120px' }}>
+        <div style={{ textAlign: 'center' }}>
+          <Typography variant="body2" style={{ marginBottom: '24px', fontStyle: 'italic' }}>Fetching most recent data</Typography>
+          <CircularProgress />
+        </div>
+      </div>,
+    );
   }
 
   const chartState = reducer.chartState[chartId];

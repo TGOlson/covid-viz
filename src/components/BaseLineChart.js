@@ -151,6 +151,7 @@ class LineChart extends React.Component {
         margin={{
           top: 50, right: smallScreen ? 30 : 110, bottom: 65, left: 80,
         }}
+        colors={{ scheme: 'category10' }}
         xScale={xScale}
         yScale={yScale}
         xFormat={xFormat}
@@ -158,7 +159,8 @@ class LineChart extends React.Component {
         gridYValues={gridYValues}
         axisLeft={axisLeft}
         isInteractive
-        // pointSize={4}
+        lineWidth={smallScreen ? 1 : 2}
+        pointSize={smallScreen ? 4 : 6}
         useMesh
         enableGridX={false}
         enableCrosshair={false}

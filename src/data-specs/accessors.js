@@ -23,6 +23,15 @@ const withFilters = (baseAccessor) => (reducer) => {
   return data.filter(({ id }) => fs[id]);
 };
 
+export const filterBefore = (date) => (accessor) => (reducer) => {
+  const ts = new Date(date).getTime();
+
+  return accessor(reducer).map(({ id, data }) => ({
+    id,
+    data: data.filter(({ x }) => x >= ts),
+  }));
+};
+
 export const filteredDeaths = withFilters(deaths);
 export const filteredCases = withFilters(cases);
 

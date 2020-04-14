@@ -1,6 +1,9 @@
 import {
-  filteredCases, filteredDeaths, deathsTimestamp, casesTimestamp,
+  filteredCases, filteredDeaths, deathsTimestamp, casesTimestamp, filterBefore,
 } from './accessors';
+
+// Best data after this
+const initialDate = new Date('3/1/2020');
 
 const computeDayOverDayChange = ({ id, data }) => {
   const changes = data.map(({ x, y }, index) => {
@@ -18,8 +21,8 @@ const filterBeforeDate = (date) => ({ id, data }) => ({
   data: data.filter(({ x }) => x >= new Date(date).getTime()),
 });
 
-const dayOverDayChangeInCases = (reducer) => filteredCases(reducer).map(computeDayOverDayChange).map(filterBeforeDate('3/5/2020'));
-const dayOverDayChangeInDeaths = (reducer) => filteredDeaths(reducer).map(computeDayOverDayChange).map(filterBeforeDate('3/5/2020'));
+const dayOverDayChangeInCases = (reducer) => filteredCases(reducer).map(computeDayOverDayChange);
+const dayOverDayChangeInDeaths = (reducer) => filteredDeaths(reducer).map(computeDayOverDayChange);
 
 const mortalityRate = (reducer) => filteredDeaths(reducer).map(({ id, data: deathData }) => {
   // TODO: inefficient to filter cases every map
@@ -42,7 +45,7 @@ export const makeSpec = (label) => ({
     title: `Cumulative ${label} Deaths`,
     group: 'Deaths',
     label: 'Cumulative',
-    getData: filteredDeaths,
+    getData: filterBefore(initialDate)(filteredDeaths),
     getUpdatedAt: deathsTimestamp,
     logScale: true,
     normalizeDays: 10,
@@ -51,7 +54,7 @@ export const makeSpec = (label) => ({
     title: `${label} Deaths Daily Rate of Change`,
     group: 'Deaths',
     label: 'Rate of Change',
-    getData: dayOverDayChangeInDeaths,
+    getData: filterBefore(initialDate)(dayOverDayChangeInDeaths),
     getUpdatedAt: deathsTimestamp,
   },
 
@@ -60,7 +63,7 @@ export const makeSpec = (label) => ({
     title: `Cumulative ${label} Cases`,
     group: 'Cases',
     label: 'Cumulative',
-    getData: filteredCases,
+    getData: filterBefore(initialDate)(filteredCases),
     getUpdatedAt: casesTimestamp,
     logScale: true,
     normalizeDays: 50,
@@ -69,7 +72,7 @@ export const makeSpec = (label) => ({
     title: `${label} Cases Daily Rate of Change`,
     group: 'Cases',
     label: 'Rate of Change',
-    getData: dayOverDayChangeInCases,
+    getData: filterBefore(initialDate)(dayOverDayChangeInCases),
     getUpdatedAt: casesTimestamp,
   },
 
@@ -78,7 +81,7 @@ export const makeSpec = (label) => ({
     title: `${label} Mortality Rate`,
     group: 'Other',
     label: 'Mortality Rate',
-    getData: mortalityRate,
+    getData: filterBefore(initialDate)(mortalityRate),
     // TODO: should really take most recent of the two
     getUpdatedAt: deathsTimestamp,
   },

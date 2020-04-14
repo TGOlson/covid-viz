@@ -16,6 +16,12 @@ Deploy
 $ npm run deploy
 ```
 
+Todo
+* move left drawer state to reducer
+* clean up tooltip
+* add daily counts
+* add table totals
+
 Additional metrics
 * testing vs hospital rates vs icu vs deaths
 * pie chart of testing vs positive vs negative
