@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
 
+import TopNavBar from '../components/TopNavBar';
+import NavHeader from '../components/NavHeader';
 import IdSelector from '../components/IdSelector';
 import { GLOBAL, US } from '../actions/const';
 
@@ -42,13 +44,13 @@ const getReducer = (namespace, store) => {
   }
 };
 
-const LeftNav = (props) => {
+const Nav = (props) => {
   const { store, dispatch, location } = props;
 
   // TODO: this is a pretty sketchy way to inspect store state
   const namespace = getNamespace(location.pathname);
   const reducer = namespace && getReducer(namespace, store);
-  const { filters, allIds, idGroupings } = reducer || {};
+  const { filters, idGroupings } = reducer || {}; // allIds available as well
 
   const onFilterToggle = (id) => dispatch({
     type: `${namespace}_TOGGLE_ID_FILTER`,
@@ -66,32 +68,26 @@ const LeftNav = (props) => {
     : null;
 
   return (
-    <nav id="left-nav">
-      <Drawer
-        variant="permanent"
-        open
-        PaperProps={{ style: { width: '240px' } }}
-      >
-        <div style={{ display: 'flex' }}>
-          <div style={{
-            height: '64px',
-            paddingLeft: '16px',
-          }}
-          >
-            <Typography color="textSecondary" variant="h6" style={{ marginTop: '6px' }}>Covid Dashboard</Typography>
-            <Typography color="textSecondary" variant="body2" style={{ fontSize: '12px' }}>@tyguyo / GitHub</Typography>
-          </div>
-        </div>
-        <Divider style={{ marginRight: '24px' }} />
-        {selector}
-      </Drawer>
-    </nav>
+    <div>
+      <TopNavBar />
+      <nav id="left-nav">
+        <Drawer
+          variant="permanent"
+          open
+          PaperProps={{ style: { width: '240px' } }}
+        >
+          <NavHeader />
+          <Divider style={{ marginRight: '24px' }} />
+          {selector}
+        </Drawer>
+      </nav>
+    </div>
   );
 };
 
-LeftNav.propTypes = propTypes;
-LeftNav.defaultProps = defaultProps;
+Nav.propTypes = propTypes;
+Nav.defaultProps = defaultProps;
 
 const mapStateToProps = (store) => ({ store });
 
-export default withRouter(connect(mapStateToProps)(LeftNav));
+export default withRouter(connect(mapStateToProps)(Nav));

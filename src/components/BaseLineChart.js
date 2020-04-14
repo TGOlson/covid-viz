@@ -127,7 +127,7 @@ class LineChart extends React.Component {
       legendPosition: 'middle',
     };
 
-    const smallScreen = true;
+    const smallScreen = false;
 
     const legend = {
       anchor: smallScreen ? 'top-left' : 'top-right',

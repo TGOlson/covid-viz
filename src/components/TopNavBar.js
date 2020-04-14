@@ -5,7 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 
-const NavBar = () => (
+const TopNavBar = () => (
   <AppBar position="fixed" color="default" id="top-nav">
     <Toolbar>
       <div style={{
@@ -23,4 +23,4 @@ const NavBar = () => (
 );
 // <Button color="inherit" component={Link} to="/experiments">Experiments</Button>
 
-export default NavBar;
+export default TopNavBar;

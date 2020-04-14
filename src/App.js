@@ -4,17 +4,14 @@ import {
 } from 'react-router-dom';
 
 import About from './pages/About';
-import LeftNav from './pages/LeftNav';
+import Nav from './pages/Nav';
 import VizPage from './pages/VizPage';
-
-import NavBar from './components/NavBar';
 
 function App() {
   return (
     <HashRouter basename="/">
       <div style={{ display: 'flex' }}>
-        <NavBar />
-        <LeftNav />
+        <Nav />
         <Switch>
           <Route exact path="/" component={About} />
           <Route path="/global" component={VizPage} />
