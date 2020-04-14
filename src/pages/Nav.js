@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
+import Hidden from '@material-ui/core/Hidden';
 
 import TopNavBar from '../components/TopNavBar';
 import NavHeader from '../components/NavHeader';
@@ -67,20 +68,27 @@ const Nav = (props) => {
     )
     : null;
 
+  const onMenuToggle = () => console.log('menu toggle');
+
   return (
     <div>
-      <TopNavBar />
-      <nav id="left-nav">
-        <Drawer
-          variant="permanent"
-          open
-          PaperProps={{ style: { width: '240px' } }}
-        >
-          <NavHeader />
-          <Divider style={{ marginRight: '24px' }} />
-          {selector}
-        </Drawer>
-      </nav>
+      <Hidden lgUp implementation="css">
+        <TopNavBar showMenuIcon onMenuToggle={onMenuToggle} />
+      </Hidden>
+      <Hidden mdDown implementation="css">
+        <TopNavBar onMenuToggle={onMenuToggle} />
+        <nav id="left-nav">
+          <Drawer
+            variant="permanent"
+            open
+            PaperProps={{ style: { width: '240px' } }}
+          >
+            <NavHeader />
+            <Divider style={{ marginRight: '24px' }} />
+            {selector}
+          </Drawer>
+        </nav>
+      </Hidden>
     </div>
   );
 };
