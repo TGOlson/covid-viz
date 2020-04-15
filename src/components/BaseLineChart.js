@@ -4,6 +4,7 @@ import { ResponsiveLine } from '@nivo/line';
 
 import deepEqual from 'deep-equal';
 
+import ChartTooltip from './ChartTooltip';
 import { ChartData } from '../propTypes';
 
 const propTypes = {
@@ -164,18 +165,23 @@ class LineChart extends React.Component {
         useMesh
         enableGridX={false}
         enableCrosshair={false}
-        // tooltip={({ point }) => {
-        //   console.log(point);
-        //   // id: "New York.72"
-        //   // index: 318
-        //   // serieId: "New York"
-        //   // serieColor: "#e8a838"
-        //   // x: 418
-        //   // y: 238
-        //   // color: "#e8a838"
-        //   // borderColor: "transparent"
-        //   return <p>foo</p>;
-        // }}
+        tooltip={({ point }) => {
+          // TODO: take raw values and format date
+          const {
+            serieId, color, data: { xFormatted, yFormatted },
+          } = point;
+
+          return (
+            <ChartTooltip
+              id={serieId}
+              color={color}
+              xFormat={(x) => (normalizeDays ? `${x} days` : x)}
+              yFormat={(y) => (group === 'Other' ? y : `${y} ${group.toLowerCase()}`)}
+              x={xFormatted.toString()}
+              y={yFormatted.toString()}
+            />
+          );
+        }}
         legends={[legend]}
       />
     );

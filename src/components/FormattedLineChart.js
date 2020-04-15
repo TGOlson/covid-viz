@@ -96,7 +96,7 @@ const FormattedLineChart = (props) => {
           </Container>
         </Hidden>
         <Hidden smUp implementation="css">
-          <Container style={{ height: '500px', maxWidth: '800px' }} disableGutters>
+          <Container style={{ height: '400px', maxWidth: '800px' }} disableGutters>
             <BaseLineChart
               smallScreen
               data={data}

@@ -19,6 +19,12 @@ body {
   }
 }
 
+@media only screen and (max-width: 480px) {
+  #top-nav {
+    position: absolute;
+  }
+}
+
 #main-container {
   width: calc(100% - 240px);
   display: flex;
