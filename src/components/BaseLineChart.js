@@ -87,7 +87,9 @@ class LineChart extends React.Component {
     };
 
     const yScale = logScale
-      ? { type: 'log', base: 10, max: 1000000 } // todo find max automatically
+      ? {
+        type: 'log', base: 10, min: 1, max: 1000000,
+      } // todo find max automatically
       : { type: 'linear', min: 0, max: 'auto' };
 
     const xFormat = normalizeDays
@@ -95,11 +97,11 @@ class LineChart extends React.Component {
       : (x) => new Date(x).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
     const gridYValues = logScale
-      ? [10, 100, 1000, 10000, 100000, 1000000, 10000000]
+      ? [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000]
       : undefined;
 
     const axisLeftTickValues = logScale
-      ? [10, 100, 1000, 10000, 100000, 1000000, 10000000]
+      ? [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000]
       : undefined;
 
     const bottomLegend = normalizeDays
