@@ -5,13 +5,11 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 
-import ChartTooltip from '../components/ChartTooltip';
 import RightNav from '../components/RightNav';
 
 const About = () => (
   <div id="main-container">
     <Container maxWidth="sm" id="main-content">
-      <ChartTooltip id="Singapore" color="#4f4f4f" x="Apr 5" y="123.24" />
       <Typography variant="h4" gutterBottom>
         About This Project
       </Typography>
