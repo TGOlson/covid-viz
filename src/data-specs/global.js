@@ -16,17 +16,57 @@ export const filters = {
 export const idGroupings = [
   {
     label: 'Americas',
-    ids: ['US', 'Canada', 'Mexico', 'Brazil'],
+    ids: [
+      'US',
+      'Canada',
+      'Mexico',
+      'Brazil',
+    ],
   },
   {
     label: 'Europe',
-    ids: ['UK', 'Spain', 'France', 'Germany', 'Italy', 'Switzerland', 'Belgium', 'Netherlands'],
+    ids: [
+      'UK',
+      'Spain',
+      'France',
+      'Germany',
+      'Italy',
+      'Switzerland',
+      'Belgium',
+      'Netherlands',
+    ],
   },
   {
     label: 'APAC',
-    ids: ['Singapore', 'Taiwan', 'Japan', 'South Korea', 'Australia'],
+    ids: [
+      'Singapore',
+      'Taiwan',
+      'Japan',
+      'South Korea',
+      'Australia',
+    ],
   },
 ];
+
+export const abbreviations = {
+  US: 'US',
+  Canada: 'CA',
+  Mexico: 'MX',
+  Brazil: 'BR',
+  UK: 'UK',
+  Spain: 'ES',
+  France: 'FR',
+  Germany: 'DE',
+  Italy: 'IT',
+  Switzerland: 'CH',
+  Belgium: 'BE',
+  Netherlands: 'NL',
+  Singapore: 'SG',
+  Taiwan: 'TW',
+  Japan: 'JP',
+  'South Korea': 'SK',
+  Australia: 'AU',
+};
 
 
 export const { defaultChartId } = Base;

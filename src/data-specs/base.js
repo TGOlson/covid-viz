@@ -44,7 +44,7 @@ export const makeSpec = (label) => ({
   'deaths-cumulative': {
     title: `Cumulative ${label} Deaths`,
     group: 'Deaths',
-    label: 'Cumulative',
+    label: 'Cumulative Count',
     getData: filterBefore(initialDate)(filteredDeaths),
     getUpdatedAt: deathsTimestamp,
     logScale: true,
@@ -62,7 +62,7 @@ export const makeSpec = (label) => ({
   'cases-cumulative': {
     title: `Cumulative ${label} Cases`,
     group: 'Cases',
-    label: 'Cumulative',
+    label: 'Cumulative Count',
     getData: filterBefore(initialDate)(filteredCases),
     getUpdatedAt: casesTimestamp,
     logScale: true,

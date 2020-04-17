@@ -23,6 +23,8 @@ const propTypes = {
   normalizeDays: PropTypes.bool.isRequired,
   onControlToggle: PropTypes.func.isRequired,
   group: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  abbreviations: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 const defaultProps = {
@@ -42,6 +44,8 @@ const FormattedLineChart = (props) => {
     normalizeDays,
     onControlToggle,
     group,
+    label,
+    abbreviations,
   } = props;
 
   const date = new Date(updatedAt);
@@ -92,6 +96,8 @@ const FormattedLineChart = (props) => {
               logScale={logScale}
               normalizeDays={normalizeDays ? normalizeDaysToggle : undefined}
               group={group}
+              label={label}
+              abbreviations={abbreviations}
             />
           </Container>
         </Hidden>
@@ -103,6 +109,8 @@ const FormattedLineChart = (props) => {
               logScale={logScale}
               normalizeDays={normalizeDays ? normalizeDaysToggle : undefined}
               group={group}
+              label={label}
+              abbreviations={abbreviations}
             />
           </Container>
         </Hidden>

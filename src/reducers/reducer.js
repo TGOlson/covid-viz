@@ -4,7 +4,9 @@ import * as USDataSpec from '../data-specs/united-states';
 
 import { initialChartState } from '../data-specs/utils';
 
-const makeInitialState = ({ filters, spec, idGroupings }) => ({
+const makeInitialState = ({
+  filters, spec, idGroupings, abbreviations,
+}) => ({
   cases: null,
   casesTimestamp: null,
   deaths: null,
@@ -12,6 +14,7 @@ const makeInitialState = ({ filters, spec, idGroupings }) => ({
   allIds: null,
   filters,
   idGroupings,
+  abbreviations,
   chartState: initialChartState(spec),
   loading: true,
 });

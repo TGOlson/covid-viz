@@ -69,9 +69,6 @@ const VizPage = (props) => {
   const basePath = match.path;
 
 
-  // xs = 600
-  // md = 960
-  // lg = 1280
   const render = (content) => (
     <div id="main-container">
       <Container maxWidth="md" id="main-content">
@@ -120,6 +117,7 @@ const VizPage = (props) => {
       normalizeDaysToggle={chartSpec.normalizeDays}
       chartState={chartState}
       group={chartSpec.group}
+      label={chartSpec.label}
 
         // from state
       logScale={chartState.logScale}
@@ -127,6 +125,7 @@ const VizPage = (props) => {
 
       // other
       onControlToggle={onControlToggle}
+      abbreviations={reducer.abbreviations}
     />,
   );
 };

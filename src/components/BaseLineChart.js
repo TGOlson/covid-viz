@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ResponsiveLine } from '@nivo/line';
-
 import deepEqual from 'deep-equal';
+import numeral from 'numeral';
+
 
 import ChartTooltip from './ChartTooltip';
 import { ChartData } from '../propTypes';
@@ -12,6 +13,7 @@ const propTypes = {
   logScale: PropTypes.bool,
   normalizeDays: PropTypes.number,
   group: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
   smallScreen: PropTypes.bool,
 };
 
@@ -33,6 +35,9 @@ const filterZeroValues = ({ id, data }) => ({
   id,
   data: data.filter(({ y }) => y !== 0),
 });
+
+const shortDateFormat = (x) => new Date(x).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+const longDateFormat = (x) => new Date(x).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
 class LineChart extends React.Component {
   constructor(props) {
@@ -67,8 +72,9 @@ class LineChart extends React.Component {
 
   renderChart() {
     const {
-      data: initialData, logScale, normalizeDays, group, smallScreen,
+      data: initialData, logScale, normalizeDays, group, smallScreen, label, abbreviations,
     } = this.props;
+
 
     let data = initialData;
     if (normalizeDays) {
@@ -78,6 +84,10 @@ class LineChart extends React.Component {
     if (logScale) {
       // filter zero values
       data = data.map(filterZeroValues);
+    }
+
+    if (smallScreen) {
+      data = data.map((d) => (abbreviations[d.id] ? ({ ...d, id: abbreviations[d.id] }) : d));
     }
 
     const xScale = {
@@ -92,9 +102,13 @@ class LineChart extends React.Component {
       } // todo find max automatically
       : { type: 'linear', min: 0, max: 'auto' };
 
-    const xFormat = normalizeDays
+    const xAxisFormat = normalizeDays
       ? undefined
-      : (x) => new Date(x).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      : shortDateFormat;
+
+    const yAxisFormat = label.includes('Rate')
+      ? (x) => numeral(x).format('0.00%')
+      : (x) => numeral(x).format('0,0');
 
     const gridYValues = logScale
       ? [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000]
@@ -115,7 +129,7 @@ class LineChart extends React.Component {
       tickPadding: 5,
       tickRotation: normalizeDays ? 0 : -40,
       tickValues: 10,
-      format: xFormat,
+      format: xAxisFormat,
       legend: bottomLegend,
       legendOffset: 50,
       legendPosition: 'middle',
@@ -127,7 +141,8 @@ class LineChart extends React.Component {
       tickSize: 5,
       tickPadding: 5,
       tickRotation: 0,
-      legend: 'Count',
+      format: yAxisFormat,
+      legend: label,
       legendOffset: -65,
       legendPosition: 'middle',
     };
@@ -136,14 +151,14 @@ class LineChart extends React.Component {
       anchor: smallScreen ? 'top-left' : 'top-right',
       direction: smallScreen ? 'row' : 'column',
       justify: false,
-      translateX: smallScreen ? -45 : 100,
+      translateX: smallScreen ? -65 : 100,
       translateY: smallScreen ? -35 : 0,
       itemsSpacing: 0,
       itemDirection: 'left-to-right',
-      itemWidth: 80,
+      itemWidth: smallScreen ? 40 : 80,
       itemHeight: 20,
       itemOpacity: 0.75,
-      symbolSize: 12,
+      symbolSize: smallScreen ? 8 : 12,
       symbolShape: 'circle',
       symbolBorderColor: 'rgba(0, 0, 0, .5)',
     };
@@ -157,7 +172,6 @@ class LineChart extends React.Component {
         colors={{ scheme: 'category10' }}
         xScale={xScale}
         yScale={yScale}
-        xFormat={xFormat}
         axisBottom={axisBottom}
         gridYValues={gridYValues}
         axisLeft={axisLeft}
@@ -177,8 +191,11 @@ class LineChart extends React.Component {
             <ChartTooltip
               id={serieId}
               color={color}
-              xFormat={(x) => (normalizeDays ? `${x} days` : x)}
-              yFormat={(y) => (group === 'Other' ? y : `${y} ${group.toLowerCase()}`)}
+              xFormat={(x) => {
+                const xInt = parseInt(x, 10);
+                return (normalizeDays ? `${xInt} days` : longDateFormat(xInt));
+              }}
+              yFormat={(y) => (label.includes('Rate') ? yAxisFormat(y) : `${yAxisFormat(y)} ${group.toLowerCase()}`)}
               x={xFormatted.toString()}
               y={yFormatted.toString()}
             />

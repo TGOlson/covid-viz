@@ -18,12 +18,12 @@ $ npm run deploy
 
 Todo
 * X graph height should be reduced on mobile
-* | clean up graph tooltip (TODO: tooltip formatting for dates and numbers)
-* Left graph axis label
-* move left drawer state to reducer
-* graph legend should use abbreviations on mobile
-* left drawer header bug on mobile
+* X clean up graph tooltip
+* X Left graph axis label
+* X graph legend should use abbreviations on mobile
 * add daily counts
+* move left drawer state to reducer
+* left drawer header bug on mobile
 * add table totals
 * add toggles/filters to url
 
