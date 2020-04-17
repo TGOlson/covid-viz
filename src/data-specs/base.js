@@ -5,24 +5,34 @@ import {
 // Best data after this
 const initialDate = new Date('3/1/2020');
 
-const computeDayOverDayChange = ({ id, data }) => {
+const addChanges = ({ id, data }) => {
   const changes = data.map(({ x, y }, index) => {
     const prev = data[index - 1];
-    const change = (index === 0 || prev.y === 0) ? 0 : ((y - prev.y) / prev.y);
+    const change = index === 0 ? 0 : y - prev.y;
 
-    return { x, y: change };
+    return { x, y, change };
   });
 
   return { id, data: changes };
 };
 
-const filterBeforeDate = (date) => ({ id, data }) => ({
-  id,
-  data: data.filter(({ x }) => x >= new Date(date).getTime()),
-});
+const dayOverDayDelta = (accessor) => (reducer) => accessor(reducer)
+  .map(addChanges)
+  .map(
+    ({ id, data }) => {
+      const mapped = data.map(({ x, change }) => ({ x, y: change }));
+      return { id, data: mapped };
+    },
+  );
 
-const dayOverDayChangeInCases = (reducer) => filteredCases(reducer).map(computeDayOverDayChange);
-const dayOverDayChangeInDeaths = (reducer) => filteredDeaths(reducer).map(computeDayOverDayChange);
+const dayOverDayRate = (accessor) => (reducer) => accessor(reducer)
+  .map(addChanges)
+  .map(
+    ({ id, data }) => {
+      const mapped = data.map(({ x, y, change }) => ({ x, y: y === 0 ? 0 : change / y }));
+      return { id, data: mapped };
+    },
+  );
 
 const mortalityRate = (reducer) => filteredDeaths(reducer).map(({ id, data: deathData }) => {
   // TODO: inefficient to filter cases every map
@@ -35,7 +45,7 @@ const mortalityRate = (reducer) => filteredDeaths(reducer).map(({ id, data: deat
   });
 
   return { id, data: mortalityData };
-}).map(filterBeforeDate('3/5/2020'));
+});
 
 export const defaultChartId = 'deaths-cumulative';
 
@@ -50,11 +60,19 @@ export const makeSpec = (label) => ({
     logScale: true,
     normalizeDays: 10,
   },
+  'deaths-daily': {
+    title: `Daily ${label} Deaths`,
+    group: 'Deaths',
+    label: 'Daily Count',
+    getData: dayOverDayDelta(filterBefore(initialDate)(filteredDeaths)),
+    getUpdatedAt: deathsTimestamp,
+    logScale: true,
+  },
   'deaths-change-rate': {
     title: `${label} Deaths Daily Rate of Change`,
     group: 'Deaths',
     label: 'Rate of Change',
-    getData: filterBefore(initialDate)(dayOverDayChangeInDeaths),
+    getData: dayOverDayRate(filterBefore(initialDate)(filteredDeaths)),
     getUpdatedAt: deathsTimestamp,
   },
 
@@ -68,11 +86,19 @@ export const makeSpec = (label) => ({
     logScale: true,
     normalizeDays: 50,
   },
+  'cases-daily': {
+    title: `Daily ${label} Cases`,
+    group: 'Cases',
+    label: 'Daily Count',
+    getData: dayOverDayDelta(filterBefore(initialDate)(filteredCases)),
+    getUpdatedAt: casesTimestamp,
+    logScale: true,
+  },
   'cases-change-rate': {
     title: `${label} Cases Daily Rate of Change`,
     group: 'Cases',
     label: 'Rate of Change',
-    getData: filterBefore(initialDate)(dayOverDayChangeInCases),
+    getData: dayOverDayRate(filterBefore(initialDate)(filteredCases)),
     getUpdatedAt: casesTimestamp,
   },
 

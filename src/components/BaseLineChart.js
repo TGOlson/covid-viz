@@ -33,7 +33,7 @@ const mapNormalizeDays = (cutoff, values) => values.map((item) => {
 
 const filterZeroValues = ({ id, data }) => ({
   id,
-  data: data.filter(({ y }) => y !== 0),
+  data: data.filter(({ y }) => y > 0),
 });
 
 const shortDateFormat = (x) => new Date(x).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
