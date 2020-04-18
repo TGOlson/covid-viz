@@ -23,10 +23,10 @@ Todo
 * X graph legend should use abbreviations on mobile
 * X add daily counts
 * p0: add table totals
-* p1: improve graph min/max axis values
+* X p1: improve graph min/max axis values
 * p1: add toggles/filters to url
 * p1: left drawer header bug on mobile
-* p1: day over day rate -> 7 day moving average
+* X p1: day over day rate -> 7 day moving average
 * p2: move left drawer state to reducer
 
 Additional metrics

@@ -4,9 +4,10 @@ import { ResponsiveLine } from '@nivo/line';
 import deepEqual from 'deep-equal';
 import numeral from 'numeral';
 
-
 import ChartTooltip from './ChartTooltip';
 import { ChartData } from '../propTypes';
+
+import { shortDateFormat, longDateFormat } from './utils';
 
 const propTypes = {
   data: ChartData.isRequired,
@@ -15,6 +16,7 @@ const propTypes = {
   group: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   smallScreen: PropTypes.bool,
+  abbreviations: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 const defaultProps = {
@@ -36,8 +38,12 @@ const filterZeroValues = ({ id, data }) => ({
   data: data.filter(({ y }) => y > 0),
 });
 
-const shortDateFormat = (x) => new Date(x).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-const longDateFormat = (x) => new Date(x).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+const max = (xs) => Math.max(...xs);
+const maxVal = (chartData) => max(
+  chartData.map(
+    ({ data }) => max(data.map(({ y }) => y)),
+  ),
+);
 
 class LineChart extends React.Component {
   constructor(props) {
@@ -98,8 +104,8 @@ class LineChart extends React.Component {
 
     const yScale = logScale
       ? {
-        type: 'log', base: 10, min: 1, max: 1000000,
-      } // todo find max automatically
+        type: 'log', base: 10, min: 1, max: maxVal(data),
+      }
       : { type: 'linear', min: 0, max: 'auto' };
 
     const xAxisFormat = normalizeDays

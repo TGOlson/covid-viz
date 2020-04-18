@@ -8,10 +8,14 @@ import { csvOptions, globalConfig, usConfig } from './csv-options';
 
 const isDateString = (s) => !isNaN(s); // eslint-disable-line no-restricted-globals
 
+// Object.keys converts keys to strings
+// This is probably an inefficient solution, but oh well
+const numberKeys = (obj) => Object.keys(obj).map((x) => parseInt(x, 10));
+
 const combineRowsById = (accum, row) => {
   const prevValue = accum[row.id] || {};
 
-  const dateKeys = Object.keys(row).filter(isDateString);
+  const dateKeys = numberKeys(row).filter(isDateString);
 
   const nextValue = dateKeys.reduce((acc, key) => ({
     ...acc,
@@ -25,7 +29,7 @@ const combineRowsById = (accum, row) => {
 };
 
 const createDataArray = (row) => {
-  const dateKeys = Object.keys(row).filter(isDateString);
+  const dateKeys = numberKeys(row).filter(isDateString);
 
   const data = dateKeys.map((key) => ({
     x: key,

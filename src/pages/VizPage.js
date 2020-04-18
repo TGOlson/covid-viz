@@ -97,6 +97,10 @@ const VizPage = (props) => {
     );
   }
 
+  if (chartSpec.component) {
+    return render(chartSpec.component(reducer));
+  }
+
   const chartState = reducer.chartState[chartId];
 
   const data = chartSpec.getData(reducer);
