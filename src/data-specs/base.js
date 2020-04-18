@@ -1,6 +1,6 @@
-import React from 'react';
-
-import DataTable from '../components/DataTable';
+// import React from 'react';
+//
+// import DataTable from '../components/DataTable';
 
 import {
   filteredCases,
@@ -81,10 +81,10 @@ export const makeSpec = (label) => ({
     // TODO: should really take most recent of the two
     getUpdatedAt: deathsTimestamp,
   },
-  heatmap: {
-    title: `${label} Case Heatmap`,
-    group: 'Other',
-    label: 'Case Heatmap',
-    component: (reducer) => <DataTable reducer={reducer} />,
-  },
+  // heatmap: {
+  //   title: `${label} Case Heatmap`,
+  //   group: 'Other',
+  //   label: 'Case Heatmap',
+  //   component: (reducer) => <DataTable reducer={reducer} />,
+  // },
 });
