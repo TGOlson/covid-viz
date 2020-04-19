@@ -48,7 +48,7 @@ const About = () => (
           </Link>
         </li>
       </ul>
-      <Typography variant="h5" gutterBottom>Data</Typography>
+      <Typography variant="h5" gutterBottom style={{ marginTop: '24px' }}>Data</Typography>
       <Typography variant="body2" gutterBottom>
         All data provided by Center for Systems Science and Engineering at Johns Hopkins University
         (
@@ -59,7 +59,7 @@ const About = () => (
         The underlying datasets from Johns Hopkins University are updated roughly every 12 hours,
         and all visualizations will show when the data was last updated.
       </Typography>
-      <Typography variant="h5" gutterBottom>Questions or Feedback?</Typography>
+      <Typography variant="h5" gutterBottom style={{ marginTop: '24px' }}>Questions or Feedback?</Typography>
       <Typography variant="body2" gutterBottom>
         Tweet me at
         {' '}
