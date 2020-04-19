@@ -188,22 +188,20 @@ class LineChart extends React.Component {
         enableGridX={false}
         enableCrosshair={false}
         tooltip={({ point }) => {
-          // TODO: take raw values and format date
           const {
             serieId, color, data: { xFormatted, yFormatted },
           } = point;
 
+          const xVal = normalizeDays ? `${xFormatted} days` : longDateFormat(xFormatted);
+          const yNum = yAxisFormat(yFormatted);
+          const yVal = label.includes('Rate') ? yNum : `${yNum} ${group.toLowerCase()}`;
+
           return (
             <ChartTooltip
-              id={serieId}
+              label={serieId}
               color={color}
-              xFormat={(x) => {
-                const xInt = parseInt(x, 10);
-                return (normalizeDays ? `${xInt} days` : longDateFormat(xInt));
-              }}
-              yFormat={(y) => (label.includes('Rate') ? yAxisFormat(y) : `${yAxisFormat(y)} ${group.toLowerCase()}`)}
-              x={xFormatted.toString()}
-              y={yFormatted.toString()}
+              x={xVal.toString()}
+              y={yVal.toString()}
             />
           );
         }}

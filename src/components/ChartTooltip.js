@@ -6,39 +6,58 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
 const propTypes = {
-  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
   xFormat: PropTypes.func,
   yFormat: PropTypes.func,
   x: PropTypes.string.isRequired,
   y: PropTypes.string.isRequired,
+  dense: PropTypes.bool,
 };
 
 const defaultProps = {
   xFormat: (x) => x,
   yFormat: (x) => x,
+  dense: false,
 };
 
-// TODO: format numbers
 const ChartTooltip = ({
-  id, color, xFormat, yFormat, x, y,
+  label, color, xFormat, yFormat, x, y, dense,
 }) => (
   <Card variant="outlined">
-    <CardContent style={{ padding: '8px 8px 6px' }}>
-      <div style={{ marginBottom: '2px' }}>
-        <span style={{
-          width: '12px',
-          height: '12px',
-          borderRadius: '6px',
-          backgroundColor: color,
-          display: 'inline-block',
-          marginRight: '6px',
-        }}
-        />
-        <Typography variant="body2" component="span" style={{ fontWeight: 500 }} gutterBottom>{id}</Typography>
-      </div>
-      <Typography variant="body2">{xFormat(x)}</Typography>
-      <Typography variant="body2">{yFormat(y)}</Typography>
+    <CardContent style={{ padding: dense ? '6px 6px 4px' : '8px 8px 6px' }}>
+      <span style={{
+        width: '12px',
+        height: '12px',
+        borderRadius: '6px',
+        backgroundColor: color,
+        display: 'inline-block',
+        marginRight: '6px',
+      }}
+      />
+      <Typography
+        variant="body2"
+        component="span"
+        style={{ fontWeight: dense ? null : 500 }}
+        gutterBottom
+      >
+        {label}
+      </Typography>
+      {dense && <Typography variant="body2" component="span"> - </Typography>}
+      <Typography
+        variant="body2"
+        component={dense ? 'span' : 'p'}
+      >
+        {xFormat(x)}
+      </Typography>
+      {dense && <Typography variant="body2" component="span">: </Typography>}
+      <Typography
+        variant="body2"
+        component={dense ? 'span' : 'p'}
+        style={{ fontWeight: dense ? 500 : null }}
+      >
+        {yFormat(y)}
+      </Typography>
     </CardContent>
   </Card>
 );
