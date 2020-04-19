@@ -86,6 +86,14 @@ class Nav extends React.Component {
       )
       : null;
 
+    const drawerContent = (
+      <div>
+        <NavHeader />
+        <Divider style={{ marginRight: '24px' }} />
+        {selector}
+      </div>
+    );
+
     return (
       <div>
         <Hidden lgUp implementation="css">
@@ -98,9 +106,7 @@ class Nav extends React.Component {
             PaperProps={{ style: { width: '240px' } }}
             ModalProps={{ keepMounted: true }}
           >
-            <NavHeader />
-            <Divider style={{ marginRight: '24px' }} />
-            {selector}
+            {drawerContent}
           </Drawer>
         </Hidden>
         <Hidden mdDown implementation="css">
@@ -111,9 +117,7 @@ class Nav extends React.Component {
             style={{ width: '240px' }}
             PaperProps={{ style: { width: '240px' } }}
           >
-            <NavHeader />
-            <Divider style={{ marginRight: '24px' }} />
-            {selector}
+            {drawerContent}
           </Drawer>
         </Hidden>
       </div>
