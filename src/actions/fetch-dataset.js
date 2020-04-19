@@ -26,8 +26,8 @@ const combineRowsById = (csv) => {
       combined[row.id] = row;
     } else {
       for (let j = 0; j < keys.length; j++) {
-        const key = numberKeys[i];
-        prev[key] = row[key] + prev[key];
+        const key = keys[j];
+        combined[row.id][key] = row[key] + prev[key];
       }
     }
   }
