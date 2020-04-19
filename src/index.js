@@ -16,5 +16,6 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
+// TODO: should probably only fetch on specific page load
 store.dispatch(fetchGlobalData());
 store.dispatch(fetchUSData());

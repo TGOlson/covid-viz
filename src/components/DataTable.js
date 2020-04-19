@@ -45,26 +45,22 @@ colors.domain = () => getColor;
 
 const DataTable = ({ reducer }) => {
   const caseData = dayOverDayDelta(cases)(reducer);
-  // console.log(caseData);
   const allKeys = caseData[0].data.map(({ x }) => x);
   const keys = allKeys.sort().slice(allKeys.length - 21, allKeys.length);
-  // const keys = sortedKeys.map(shortDateFormat);
+  const keyHash = keys.reduce((accum, key) => ({ ...accum, [key]: true }), {});
+
+  const sumVals = (obj) => Object.values(obj).filter((x) => !isNaN(x))
+    .reduce((x, y) => x + y, 0);
 
   const formattedData = caseData.map(({ id, data }) => {
-    const flattenedData = data.reduce((accum, { x, y }) => ({ ...accum, [x]: y }), {});
+    const flattenedData = data.reduce(
+      (accum, { x, y }) => (keyHash[x] ? { ...accum, [x]: y } : accum), {},
+    );
+
     return { ...flattenedData, id };
-  }).sort((a, b) => {
-    // compares max value, but maybe should compare total
-    const aMax = Math.max(...Object.values(a).filter((x) => !isNaN(x)));
-    const bMax = Math.max(...Object.values(b).filter((x) => !isNaN(x)));
-    // console.log(aMax, bMax);
-    return bMax - aMax;
-  });
+  }).sort((a, b) => sumVals(b) - sumVals(a));
 
   const height = formattedData.length * 25;
-  // const keys = caseData[0].data.map(({ x }) => x).sort().reverse().slice(0, 21)
-  //   .map(shortDateFormat);
-
 
   return (
     <Container style={{ width: '800px', height: `${height}px` }}>

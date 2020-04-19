@@ -6,37 +6,42 @@ import {
 
 import { csvOptions, globalConfig, usConfig } from './csv-options';
 
-const isDateString = (s) => !isNaN(s); // eslint-disable-line no-restricted-globals
-
 // Object.keys converts keys to strings
 // This is probably an inefficient solution, but oh well
-const numberKeys = (obj) => Object.keys(obj).map((x) => parseInt(x, 10));
+const numberKeys = (obj) => Object.keys(obj).map((x) => parseInt(x, 10)).filter((x) => !isNaN(x));
 
-const combineRowsById = (accum, row) => {
-  const prevValue = accum[row.id] || {};
+// A little mutation, but this will get called a bunch
+// so worth it for perf improvements on initial render
+const combineRowsById = (csv) => {
+  // map <id, row>
+  const combined = {};
 
-  const dateKeys = numberKeys(row).filter(isDateString);
+  const keys = numberKeys(csv[0]);
 
-  const nextValue = dateKeys.reduce((acc, key) => ({
-    ...acc,
-    [key]: row[key] + (prevValue[key] || 0),
-  }), { id: row.id });
+  for (let i = 0; i < csv.length; i++) {
+    const row = csv[i];
+    const prev = combined[row.id];
 
-  return {
-    ...accum,
-    [row.id]: nextValue,
-  };
-};
+    if (!prev) {
+      combined[row.id] = row;
+    } else {
+      for (let j = 0; j < keys.length; j++) {
+        const key = numberKeys[i];
+        prev[key] = row[key] + prev[key];
+      }
+    }
+  }
 
-const createDataArray = (row) => {
-  const dateKeys = numberKeys(row).filter(isDateString);
+  const rows = Object.values(combined);
 
-  const data = dateKeys.map((key) => ({
-    x: key,
-    y: row[key],
-  }), []);
+  return rows.map((row) => {
+    const data = keys.map((key) => ({
+      x: key,
+      y: row[key],
+    }), []);
 
-  return { id: row.id, data };
+    return { id: row.id, data };
+  });
 };
 
 const fetchData = (location, dataset) => fetch(dataUrl(location, dataset))
@@ -47,8 +52,7 @@ const fetchData = (location, dataset) => fetch(dataUrl(location, dataset))
 
     return parseCsv(x, options);
   })
-  .then((csv) => Object.values(csv.reduce(combineRowsById, {}))
-    .map(createDataArray));
+  .then((csv) => combineRowsById(csv));
 
 const fetchTimestamp = (location, dataset) => fetch(timestampUrl(location, dataset))
   .then((res) => res.json())
@@ -58,13 +62,10 @@ const fetchTimestamp = (location, dataset) => fetch(timestampUrl(location, datas
     return null;
   });
 
-export default (namespace, dataset) => (dispatch) => Promise.all([
-  fetchData(namespace, dataset).then((rows) => dispatch({
-    type: `${namespace}_FETCHED_DATASET_${dataset}`,
-    value: rows,
-  })),
-  fetchTimestamp(namespace, dataset).then((timestamp) => dispatch({
-    type: `${namespace}_FETCHED_TIMESTAMP_${dataset}`,
-    value: timestamp,
-  })),
-]);
+export default (namespace, dataset) => (dispatch) => fetchData(namespace, dataset).then((rows) => dispatch({
+  type: `${namespace}_FETCHED_DATASET_${dataset}`,
+  value: rows,
+})).then(() => fetchTimestamp(namespace, dataset).then((timestamp) => dispatch({
+  type: `${namespace}_FETCHED_TIMESTAMP_${dataset}`,
+  value: timestamp,
+})));
