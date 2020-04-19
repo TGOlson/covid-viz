@@ -18,7 +18,7 @@ const link = (url, text) => (
 );
 
 const NavHeader = () => (
-  <div style={{ display: 'flex' }}>
+  <div style={{ display: 'flex', height: '64px' }}>
     <div style={{
       height: '64px',
       paddingLeft: '16px',
