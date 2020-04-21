@@ -97,6 +97,25 @@ const VizPage = (props) => {
     );
   }
 
+  if (reducer.error) {
+    return render(
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '120px' }}>
+        <div style={{ textAlign: 'center' }}>
+          <Typography variant="body2">
+            There was an error loading the most recent dataset.
+            Refresh the page to try loading again.
+          </Typography>
+          <Typography variant="body2">
+            If the issue persists, there may be a problem with the
+            {' '}
+            <a target="_blank" rel="noopener noreferrer" href="https://github.com/CSSEGISandData/COVID-19">source data</a>
+            .
+          </Typography>
+        </div>
+      </div>,
+    );
+  }
+
   if (chartSpec.component) {
     return render(chartSpec.component(reducer));
   }

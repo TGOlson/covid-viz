@@ -4,12 +4,16 @@ import {
 
 import fetchDataset from './fetch-dataset';
 
-export const fetchGlobalData = () => (dispatch) => fetchDataset(GLOBAL, DEATHS)(dispatch)
-  .then(() => fetchDataset(GLOBAL, CASES)(dispatch)).then(() => dispatch({
-    type: `${GLOBAL}_DATA_LOADED`,
-  }));
+const fetchAllDatasets = (location) => () => (dispatch) => fetchDataset(location, DEATHS)(dispatch)
+  .then(() => fetchDataset(location, CASES)(dispatch)).then(() => dispatch({
+    type: `${location}_DATA_LOADED`,
+  }))
+  .catch((error) => {
+    dispatch({
+      type: `${location}_DATA_LOAD_ERROR`,
+      error,
+    });
+  });
 
-export const fetchUSData = () => (dispatch) => fetchDataset(US, DEATHS)(dispatch)
-  .then(() => fetchDataset(US, CASES)(dispatch)).then(() => dispatch({
-    type: `${US}_DATA_LOADED`,
-  }));
+export const fetchGlobalData = fetchAllDatasets(GLOBAL);
+export const fetchUSData = fetchAllDatasets(US);

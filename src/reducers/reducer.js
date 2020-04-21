@@ -17,6 +17,7 @@ const makeInitialState = ({
   abbreviations,
   chartState: initialChartState(spec),
   loading: true,
+  error: null,
 });
 
 const makeReducer = (namespace, initialState) => (state = initialState, action) => {
@@ -70,6 +71,13 @@ const makeReducer = (namespace, initialState) => (state = initialState, action) 
     case `${namespace}_DATA_LOADED`:
       return {
         ...state,
+        loading: false,
+      };
+
+    case `${namespace}_DATA_LOAD_ERROR`:
+      return {
+        ...state,
+        error: action.error,
         loading: false,
       };
 

@@ -45,7 +45,13 @@ const combineRowsById = (csv) => {
 };
 
 const fetchData = (location, dataset) => fetch(dataUrl(location, dataset))
-  .then((res) => res.text())
+  .then((res) => {
+    if (res.status !== 200) {
+      throw new Error('Data fetch error');
+    }
+
+    return res.text();
+  })
   .then((x) => {
     const config = location === GLOBAL ? globalConfig : usConfig;
     const options = csvOptions(config);
