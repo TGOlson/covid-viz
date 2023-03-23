@@ -1,6 +1,6 @@
 # covid-viz
 
-http://tgolson.com/covid-viz
+https://maybetyler.com/covid-viz
 
 Dashboard for various covid visualizations. Data from by Johns Hopkins CSSE (https://github.com/CSSEGISandData/COVID-19)
 
